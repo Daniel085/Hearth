@@ -77,7 +77,9 @@ This project is in early conceptual stages. If you're interested in contributing
 
 ## License
 
-To be determined
+MIT License - see [LICENSE](LICENSE) file for details
+
+Hearth is free and open source software. You are welcome to use, modify, and distribute it according to the terms of the MIT License.
 
 ---
 
