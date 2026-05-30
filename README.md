@@ -38,6 +38,7 @@ In an age of constant notifications and social media pressure, Hearth takes a di
 
 - **Language**: Swift
 - **UI Framework**: SwiftUI
+- **Deployment Target**: iOS 17.0+
 - **Core Frameworks**:
   - Vision (face detection and clustering)
   - Core ML (pattern recognition and predictions)
@@ -46,6 +47,12 @@ In an age of constant notifications and social media pressure, Hearth takes a di
   - EventKit (calendar integration)
   - Core Location (place tracking)
   - BackgroundTasks (silent data processing)
+
+## Getting Started
+
+1. Open `HearthApp/HearthApp.xcodeproj` in Xcode
+2. Select your target device or simulator
+3. Press `Cmd+R` to build and run
 
 ## Design Philosophy
 

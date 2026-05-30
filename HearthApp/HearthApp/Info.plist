@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<true/>
+	</dict>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>UILaunchScreen</key>
+	<dict/>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+
+	<!-- Privacy Permissions -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Hearth analyzes your photos to help you stay connected with people who matter most. All processing happens on your device.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Hearth needs access to your photo library to identify the people you care about.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Hearth uses your location to remind you about meaningful places and people nearby. All data stays on your device.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Hearth can provide contextual reminders based on places you visit. All location data remains private on your device.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Hearth accesses your calendar to remember important dates and help you stay in touch. No data is shared.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Hearth uses your contacts to help you maintain relationships. All information stays on your device.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Hearth uses Face ID to keep your relationship data secure.</string>
+</dict>
+</plist>
