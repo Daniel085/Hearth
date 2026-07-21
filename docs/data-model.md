@@ -34,7 +34,7 @@ The central entity. One row per human the user has a relationship with.
 | `id` | UUID | Primary key |
 | `displayName` | String | May start empty for a face cluster with no contact match |
 | `contactIdentifier` | String? | `CNContact` identifier, if linked |
-| `faceClusterID` | UUID? | Links to the Vision clustering output |
+| — | — | *No `faceClusterID`.* A person owns **many** face groups; see `FaceGroup` below |
 | `birthday` | Date? | From Contacts, or user-entered |
 | `tier` | Int16 | User-assigned closeness, 0–3. See §4.1 |
 | `cadenceTargetDays` | Int32? | Desired days between contact; nil = infer it |
@@ -89,6 +89,26 @@ One row per (photo, detected person) pair. The output of the Vision pipeline.
 Store `localIdentifier`, never pixels. Keeps the DB small and means revoking photo
 permission genuinely revokes access.
 
+### `FaceGroup`
+One face cluster, belonging to a person. **A person may own several.**
+
+| Attribute | Type | Notes |
+|---|---|---|
+| `id` | UUID | |
+| `clusterID` | UUID | Cluster identity from the last scan, so groups survive a rescan |
+| `createdAt` | Date | |
+| `label` | String? | Optional user note, e.g. "as a baby" |
+| `earliestCapture` / `latestCapture` | Date? | Span of member photos, for chronological ordering |
+
+Relationships: `person` (→ Person), `appearances` (→many PhotoAppearance).
+
+**Why an entity rather than a `faceClusterID` field on Person.** A single person
+legitimately produces several clusters: a face that changes a lot over time will not
+gather into one at any threshold that also keeps distinct people apart — measured, see
+[vision-findings.md](./vision-findings.md) §4e. Forcing one cluster per person would make
+the normal case look like an error the user must repair. Instead a person accumulates
+groups, each internally clean, and the chronology is preserved rather than collapsed.
+
 ### `Place`
 | Attribute | Type | Notes |
 |---|---|---|
@@ -127,8 +147,12 @@ of pre-computed rows, and the reason string is generated where the context exist
        │         └──────┬───────┘         │
        │                │                 │
 ┌──────┴──────┐  ┌──────┴───────┐  ┌──────┴────────┐
-│ Interaction │  │    Signal    │  │PhotoAppearance│
+│ Interaction │  │    Signal    │  │   FaceGroup   │  (many per Person)
 └─────────────┘  └──────────────┘  └───────┬───────┘
+                                            │
+                                    ┌───────┴───────┐
+                                    │PhotoAppearance│
+                                    └───────┬───────┘
                                             │ (lat/long)
                                      ┌──────┴──────┐
                                      │    Place    │

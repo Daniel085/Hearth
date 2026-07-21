@@ -27,11 +27,25 @@ enum HearthModel {
         signal.name = "CDSignal"
         signal.managedObjectClassName = "CDSignal"
 
+        // A face cluster, owned by a Person. One Person may own many.
+        //
+        // Modelled as an entity rather than a `faceClusterID` field on Person because a
+        // single person legitimately produces several clusters: a face that changes a
+        // lot over time (a baby over months, a beard grown and shaved) will not group
+        // into one at any threshold that keeps distinct people apart. Rather than force
+        // one cluster per person and treat the rest as an error the user must merge
+        // away, a Person simply accumulates clusters. Each remains internally clean.
+        //
+        // See docs/vision-findings.md §4e.
+        let faceGroup = NSEntityDescription()
+        faceGroup.name = "CDFaceGroup"
+        faceGroup.managedObjectClassName = "CDFaceGroup"
+
         person.properties = [
             attr("id", .UUIDAttributeType),
             attr("displayName", .stringAttributeType, optional: true),
             attr("contactIdentifier", .stringAttributeType, optional: true),
-            attr("faceClusterID", .UUIDAttributeType, optional: true),
+            // No faceClusterID here — a Person owns many face groups via `faceGroups`.
             attr("birthday", .dateAttributeType, optional: true),
             attr("tier", .integer16AttributeType, default: 1),
             attr("cadenceTargetDays", .integer32AttributeType, optional: true),
@@ -74,6 +88,19 @@ enum HearthModel {
             attr("dismissedAt", .dateAttributeType, optional: true),
         ]
 
+        faceGroup.properties = [
+            attr("id", .UUIDAttributeType),
+            // Cluster identity from the last scan, so groups survive a rescan.
+            attr("clusterID", .UUIDAttributeType),
+            attr("createdAt", .dateAttributeType),
+            // Optional user note, e.g. "as a baby" — the reason a person has more than
+            // one group is usually meaningful to them.
+            attr("label", .stringAttributeType, optional: true),
+            // Date span of the member photos, for ordering groups chronologically.
+            attr("earliestCapture", .dateAttributeType, optional: true),
+            attr("latestCapture", .dateAttributeType, optional: true),
+        ]
+
         // Relationships. Each pair must be wired as inverses or Core Data warns and
         // delete propagation misbehaves.
         link(
@@ -84,12 +111,22 @@ enum HearthModel {
             from: person, name: "appearances", to: appearance, toMany: true,
             inverseName: "person", deleteRule: .nullifyDeleteRule
         )
+        // A person owns many face groups. Deleting the person deletes the groups, but
+        // nullify on the appearances below means the underlying photo records survive.
+        link(
+            from: person, name: "faceGroups", to: faceGroup, toMany: true,
+            inverseName: "person", deleteRule: .cascadeDeleteRule
+        )
+        link(
+            from: faceGroup, name: "appearances", to: appearance, toMany: true,
+            inverseName: "faceGroup", deleteRule: .nullifyDeleteRule
+        )
         link(
             from: person, name: "signals", to: signal, toMany: true,
             inverseName: "person", deleteRule: .cascadeDeleteRule
         )
 
-        model.entities = [person, interaction, appearance, signal]
+        model.entities = [person, interaction, appearance, signal, faceGroup]
         return model
     }()
 
@@ -146,7 +183,7 @@ final class CDPerson: NSManagedObject {
     @NSManaged var id: UUID
     @NSManaged var displayName: String?
     @NSManaged var contactIdentifier: String?
-    @NSManaged var faceClusterID: UUID?
+    // No single faceClusterID — see `faceGroups`.
     @NSManaged var birthday: Date?
     @NSManaged var tier: Int16
     @NSManaged var cadenceTargetDays: NSNumber?
@@ -156,6 +193,24 @@ final class CDPerson: NSManagedObject {
     @NSManaged var interactions: NSSet?
     @NSManaged var appearances: NSSet?
     @NSManaged var signals: NSSet?
+    @NSManaged var faceGroups: NSSet?
+}
+
+/// One face cluster belonging to a person. A person may own several.
+///
+/// Multiple groups per person is the normal case, not an error state: a face that
+/// changes substantially over time cannot be gathered into a single cluster at any
+/// threshold that also keeps different people apart.
+@objc(CDFaceGroup)
+final class CDFaceGroup: NSManagedObject {
+    @NSManaged var id: UUID
+    @NSManaged var clusterID: UUID
+    @NSManaged var createdAt: Date
+    @NSManaged var label: String?
+    @NSManaged var earliestCapture: Date?
+    @NSManaged var latestCapture: Date?
+    @NSManaged var person: CDPerson?
+    @NSManaged var appearances: NSSet?
 }
 
 @objc(CDInteraction)
@@ -184,6 +239,7 @@ final class CDPhotoAppearance: NSManagedObject {
     @NSManaged var latitude: NSNumber?
     @NSManaged var longitude: NSNumber?
     @NSManaged var person: CDPerson?
+    @NSManaged var faceGroup: CDFaceGroup?
 }
 
 @objc(CDSignal)

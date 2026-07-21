@@ -83,6 +83,11 @@ final class PhotoLibraryScanner: ObservableObject {
     /// In-flight re-clustering, cancelled when a newer threshold arrives.
     private var reclusterTask: Task<Void, Never>?
 
+    /// Cluster ID → person name. In-memory for now; becomes CDFaceGroup rows once the
+    /// labelling flow writes to Core Data. Several clusters mapping to one name is the
+    /// expected case, not a conflict.
+    @Published private(set) var assignments: [UUID: String] = [:]
+
     /// Crop padding used by the last scan. Exposed because it's an open experimental
     /// variable, not a tuned constant — see `VisionFaceExtractor.cropPadding`.
     @Published var cropPadding: Double = 0.25
@@ -311,27 +316,40 @@ final class PhotoLibraryScanner: ObservableObject {
         )
     }
 
-    /// Merges several clusters into one, for when a person was split across groups.
+    /// Assigns one or more face groups to the same person.
     ///
-    /// Clustering runs at a conservative threshold (see `scan`), so a face that changed
-    /// over time arrives as multiple groups. This is the user's correction, and it is
-    /// the reason the conservative threshold is affordable: merging is one tap, whereas
-    /// separating two people the algorithm wrongly fused is not something the UI can
-    /// offer credibly.
-    func mergeClusters(ids: Set<UUID>) {
-        guard ids.count > 1 else { return }
+    /// Note this does **not** merge the clusters. Each stays intact and internally clean;
+    /// they are simply recorded as belonging to the same person. A face that changed a
+    /// lot over time genuinely is several distinct clusters — collapsing them would
+    /// discard that, and would also mean re-running clustering at a threshold the
+    /// contamination sweep shows is unsafe.
+    ///
+    /// Keeping them separate also preserves the chronology: "as a baby" and "now" are
+    /// meaningfully different groups of the same person.
+    func assign(clusterIDs: Set<UUID>, toPersonNamed name: String) {
+        guard !clusterIDs.isEmpty else { return }
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
 
-        let merged = clusters.filter { ids.contains($0.id) }
-        guard merged.count > 1 else { return }
+        for id in clusterIDs {
+            assignments[id] = trimmed
+        }
+    }
 
-        let combined = FaceCluster(faces: merged.flatMap(\.faces))
-        var remaining = clusters.filter { !ids.contains($0.id) }
+    func personName(forCluster id: UUID) -> String? {
+        assignments[id]
+    }
 
-        // Keep the merged group where the strongest of its parts sat, so the list does
-        // not reshuffle under the user's finger after a merge.
-        let insertAt = clusters.firstIndex { ids.contains($0.id) } ?? 0
-        remaining.insert(combined, at: min(insertAt, remaining.count))
-        clusters = remaining
+    /// Cluster IDs already assigned to the given person.
+    func clusterIDs(forPersonNamed name: String) -> Set<UUID> {
+        Set(assignments.filter { $0.value == name }.keys)
+    }
+
+    /// Every person named so far, with how many face groups each owns.
+    var namedPeople: [(name: String, groupCount: Int)] {
+        Dictionary(grouping: assignments.values, by: { $0 })
+            .map { (name: $0.key, groupCount: $0.value.count) }
+            .sorted { $0.name < $1.name }
     }
 
     /// Re-clusters off the main actor, coalescing rapid changes.

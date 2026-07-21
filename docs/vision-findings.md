@@ -312,27 +312,32 @@ Note this makes the §4a warning concrete: the percentile-midpoint "suggested th
 of 0.83 sits in territory where 4–9 pairs already contaminate. Shipping it as a default
 would have quietly produced merged strangers.
 
-### Why this is not fatal
+### The resolution: many face groups per person
 
-Contamination and fragmentation are not symmetric costs (§3). A wrongly merged pair is a
-false relationship the user cannot credibly undo; a fragmented person is an annoyance
-fixed by tapping "same person". So the resolution is:
+The problem dissolves once a `Person` is allowed to own **several** face clusters.
 
-**Cluster conservatively at the safe ceiling, and let the user merge.**
+Cluster tightly at the measured safe ceiling, where the data is provably clean, and let
+one person accumulate as many groups as their face warrants. A baby at 3 months and at 9
+months are two clusters — and that is simply *correct*, not an error to be repaired. The
+clustering is not wrong; the assumption that one person yields one cluster was.
 
-At 0.5 the clustering is clean by measurement. A face that changed over months arrives as
-several groups, and the user merges them during labelling — which they are already doing,
-person by person, because Apple's People album is unavailable (see
-[people-album-access.md](./people-album-access.md)). The merge control costs one extra tap
-on an affordance the labelling flow needs regardless.
+Note this is **not** merging the clusters. Each stays intact and internally clean; they
+are recorded as belonging to the same person. Collapsing them would discard real
+information (the chronology, "as a baby" vs. "now") and would require re-clustering at a
+threshold the sweep above shows is unsafe.
 
-This also matches the storyboards' Step 4, which already presents clusters one at a time
-for identification. Merging is a natural extension of that screen rather than new surface
-area.
+Schema consequence: `Person.faceClusterID` — a single optional UUID — has been replaced by
+a `CDFaceGroup` entity, with `Person → many FaceGroup → many PhotoAppearance`. The old
+field encoded the wrong assumption structurally.
+
+This fits the storyboards' Step 4, which already presents clusters one at a time for
+identification. Naming simply allows "this is also Sarah" — an option the flow needed
+regardless, since Apple's People album is unavailable (see
+[people-album-access.md](./people-album-access.md)) and every group must be named by hand.
 
 **Deliberately rejected: a per-person adaptive threshold.** It would let the baby cluster
 loosely while others stay tight, but there is no way to know a face is "the changing kind"
-before it has been labelled — and by then the user has already merged it. It adds a tuning
+before it has been labelled — and by then the user has already named it. It adds a tuning
 parameter that cannot be set from available evidence.
 
 ### Consequence for the default

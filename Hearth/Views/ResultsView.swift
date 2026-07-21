@@ -12,6 +12,7 @@ struct ResultsView: View {
     @State private var threshold: Double = ClusteringParameters.default.mergeThreshold
     @State private var isSelecting = false
     @State private var selected: Set<UUID> = []
+    @State private var nameTarget: Set<UUID>?
 
     private func toggle(_ id: UUID) {
         if selected.contains(id) { selected.remove(id) } else { selected.insert(id) }
@@ -96,17 +97,20 @@ struct ResultsView: View {
                             NavigationLink {
                                 ClusterDetailView(cluster: cluster)
                             } label: {
-                                ClusterRow(cluster: cluster)
+                                ClusterRow(
+                                    cluster: cluster,
+                                    personName: scanner.personName(forCluster: cluster.id)
+                                )
                             }
                         }
                     }
                 }
             } header: {
                 HStack {
-                    Text("People found")
+                    Text("Face groups")
                     Spacer()
                     if !scanner.clusters.isEmpty {
-                        Button(isSelecting ? "Done" : "Merge") {
+                        Button(isSelecting ? "Done" : "Name someone") {
                             if isSelecting { selected.removeAll() }
                             isSelecting.toggle()
                         }
@@ -116,34 +120,114 @@ struct ResultsView: View {
                 }
             } footer: {
                 if isSelecting {
-                    Text("Select the groups that show the same person, then tap Merge. Faces that change a lot over time — babies especially — often arrive as several groups.")
+                    Text("Select every group showing the same person — a face that changes over time will appear as several. They stay separate; they're just recorded as the same person.")
                 } else {
-                    Text("Groups are ranked by how often someone recurs over time, not by raw photo count.")
+                    Text("Groups are ranked by how often someone recurs over time, not by raw photo count. One person may have several groups.")
                 }
             }
 
-            if isSelecting && selected.count > 1 {
+            if isSelecting && !selected.isEmpty {
                 Section {
                     Button {
-                        scanner.mergeClusters(ids: selected)
-                        selected.removeAll()
-                        isSelecting = false
+                        nameTarget = selected
                     } label: {
-                        Text("Merge \(selected.count) groups into one")
+                        Text("Name \(selected.count) group\(selected.count == 1 ? "" : "s")")
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
                     .listRowBackground(Color.clear)
                 }
             }
+
+            if !scanner.namedPeople.isEmpty {
+                Section("People") {
+                    ForEach(scanner.namedPeople, id: \.name) { entry in
+                        LabeledContent(
+                            entry.name,
+                            value: "\(entry.groupCount) group\(entry.groupCount == 1 ? "" : "s")"
+                        )
+                    }
+                }
+            }
         }
         .navigationTitle("Results")
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(item: $nameTarget) { target in
+            NamePersonSheet(
+                groupCount: target.count,
+                existingNames: scanner.namedPeople.map(\.name)
+            ) { name in
+                scanner.assign(clusterIDs: target, toPersonNamed: name)
+                selected.removeAll()
+                isSelecting = false
+                nameTarget = nil
+            } onCancel: {
+                nameTarget = nil
+            }
+        }
+    }
+}
+
+/// Lets `Set<UUID>` drive a `.sheet(item:)`.
+extension Set: @retroactive Identifiable where Element == UUID {
+    public var id: String { sorted(by: { $0.uuidString < $1.uuidString })
+        .map(\.uuidString).joined() }
+}
+
+/// Names the selected face groups, offering existing people so a second group can be
+/// added to someone already named — the common case for a face that changed over time.
+struct NamePersonSheet: View {
+    let groupCount: Int
+    let existingNames: [String]
+    let onSave: (String) -> Void
+    let onCancel: () -> Void
+
+    @State private var name = ""
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    TextField("Name", text: $name)
+                        .textContentType(.name)
+                        .autocorrectionDisabled()
+                } header: {
+                    Text("Who is this?")
+                } footer: {
+                    Text("\(groupCount) face group\(groupCount == 1 ? "" : "s") will be linked to this person.")
+                }
+
+                if !existingNames.isEmpty {
+                    Section {
+                        ForEach(existingNames, id: \.self) { existing in
+                            Button(existing) { name = existing }
+                        }
+                    } header: {
+                        Text("Already named")
+                    } footer: {
+                        Text("Pick someone to add these groups to them.")
+                    }
+                }
+            }
+            .navigationTitle("Name person")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", action: onCancel)
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") { onSave(name) }
+                        .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
+                }
+            }
+        }
+        .presentationDetents([.medium])
     }
 }
 
 struct ClusterRow: View {
     let cluster: FaceCluster
+    var personName: String? = nil
     @State private var thumbnail: UIImage?
 
     var body: some View {
@@ -162,8 +246,16 @@ struct ClusterRow: View {
             .clipShape(RoundedRectangle(cornerRadius: 8))
 
             VStack(alignment: .leading, spacing: 2) {
-                Text("\(cluster.assetCount) photos")
-                    .font(.body.weight(.medium))
+                if let personName {
+                    Text(personName)
+                        .font(.body.weight(.semibold))
+                    Text("\(cluster.assetCount) photos")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } else {
+                    Text("\(cluster.assetCount) photos")
+                        .font(.body.weight(.medium))
+                }
                 if let range = cluster.dateRange {
                     Text(rangeDescription(range))
                         .font(.caption)
