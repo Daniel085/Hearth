@@ -289,6 +289,58 @@ Even at 7ms, re-clustering ran **synchronously on the main actor** — the same 
 drawing the slider. Now it runs in a detached task, with in-flight work cancelled when a
 newer threshold arrives, since mid-drag values are throwaway.
 
+## 4e. Contamination sweep — no single threshold works
+
+Measured against 62 same-photo (known-different-person) pairs:
+
+| Threshold | Wrongly merged |
+|---|---|
+| 0.1 – 0.5 | **0 — clean** |
+| 0.6 | 1 of 62 |
+| 0.7 – 0.8 | 4 of 62 |
+| 0.9 | 9 of 62 |
+| **1.0** | **14 of 62 (23%)** |
+| 1.1 | 28 of 62 |
+| 1.2 | 43 of 62 |
+| 1.3 | 56 of 62 |
+
+**The safe ceiling is 0.5. The baby needs 1.0+, where 23% of known-different pairs
+merge.** There is no single global threshold that both groups a changing face and keeps
+distinct people apart. This is the bad case flagged in §4b.
+
+Note this makes the §4a warning concrete: the percentile-midpoint "suggested threshold"
+of 0.83 sits in territory where 4–9 pairs already contaminate. Shipping it as a default
+would have quietly produced merged strangers.
+
+### Why this is not fatal
+
+Contamination and fragmentation are not symmetric costs (§3). A wrongly merged pair is a
+false relationship the user cannot credibly undo; a fragmented person is an annoyance
+fixed by tapping "same person". So the resolution is:
+
+**Cluster conservatively at the safe ceiling, and let the user merge.**
+
+At 0.5 the clustering is clean by measurement. A face that changed over months arrives as
+several groups, and the user merges them during labelling — which they are already doing,
+person by person, because Apple's People album is unavailable (see
+[people-album-access.md](./people-album-access.md)). The merge control costs one extra tap
+on an affordance the labelling flow needs regardless.
+
+This also matches the storyboards' Step 4, which already presents clusters one at a time
+for identification. Merging is a natural extension of that screen rather than new surface
+area.
+
+**Deliberately rejected: a per-person adaptive threshold.** It would let the baby cluster
+loosely while others stay tight, but there is no way to know a face is "the changing kind"
+before it has been labelled — and by then the user has already merged it. It adds a tuning
+parameter that cannot be set from available evidence.
+
+### Consequence for the default
+
+The shipped default must be **derived per library from its own ground truth**, not
+hardcoded. `safeThresholdCeiling()` computes exactly this. A constant tuned on one library
+would contaminate another.
+
 ## 5. Known limitations
 
 1. **Still O(n²) memory.** The clusterer holds a full pairwise distance matrix. At a few

@@ -153,6 +153,20 @@ final class PhotoLibraryScanner: ObservableObject {
         state = .clustering
         lastDescriptors = descriptors
 
+        // Pick the threshold from this library's own ground truth rather than a constant.
+        //
+        // Measured on a real library: the highest contamination-free threshold was 0.5,
+        // while a face that changed over months needed 1.0+ — where 23% of
+        // known-different pairs merge. No single hardcoded value can serve both, and a
+        // constant tuned on one library will contaminate another.
+        //
+        // So cluster conservatively at the measured ceiling and let the user merge
+        // fragments during labelling. A wrong merge is a false relationship they cannot
+        // credibly undo; a fragment is one extra tap. See docs/vision-findings.md §4e.
+        if let ceiling = safeThresholdCeiling() {
+            parameters.mergeThreshold = ceiling
+        }
+
         let result = FaceClusterer(parameters: parameters).cluster(descriptors)
         clusters = result.surfaced
 
@@ -295,6 +309,29 @@ final class PhotoLibraryScanner: ObservableObject {
                 ? nil
                 : differentPersonDistances.sorted()[differentPersonDistances.count / 2]
         )
+    }
+
+    /// Merges several clusters into one, for when a person was split across groups.
+    ///
+    /// Clustering runs at a conservative threshold (see `scan`), so a face that changed
+    /// over time arrives as multiple groups. This is the user's correction, and it is
+    /// the reason the conservative threshold is affordable: merging is one tap, whereas
+    /// separating two people the algorithm wrongly fused is not something the UI can
+    /// offer credibly.
+    func mergeClusters(ids: Set<UUID>) {
+        guard ids.count > 1 else { return }
+
+        let merged = clusters.filter { ids.contains($0.id) }
+        guard merged.count > 1 else { return }
+
+        let combined = FaceCluster(faces: merged.flatMap(\.faces))
+        var remaining = clusters.filter { !ids.contains($0.id) }
+
+        // Keep the merged group where the strongest of its parts sat, so the list does
+        // not reshuffle under the user's finger after a merge.
+        let insertAt = clusters.firstIndex { ids.contains($0.id) } ?? 0
+        remaining.insert(combined, at: min(insertAt, remaining.count))
+        clusters = remaining
     }
 
     /// Re-clusters off the main actor, coalescing rapid changes.

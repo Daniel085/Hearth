@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hearth - Storyboards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 40px 20px;
+            color: #2c3e50;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 10px;
+            color: #d4674f;
+            font-weight: 700;
+        }
+        
+        .tagline {
+            text-align: center;
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin-bottom: 50px;
+            font-style: italic;
+        }
+        
+        .flow-section {
+            margin-bottom: 60px;
+        }
+        
+        .flow-title {
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            color: #34495e;
+            border-bottom: 3px solid #d4674f;
+            padding-bottom: 10px;
+        }
+        
+        .storyboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .storyboard-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .storyboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        
+        .card-number {
+            background: #d4674f;
+            color: white;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        
+        .card-screen {
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            position: relative;
+        }
+        
+        .screen-welcome { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .screen-photos { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .screen-people { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .screen-places { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .screen-permissions { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); }
+        .screen-home { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .screen-contact { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+        .screen-action { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+        
+        .screen-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .screen-title {
+            color: white;
+            font-size: 1.5em;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .screen-subtitle {
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        
+        .card-description {
+            padding: 20px;
+        }
+        
+        .card-description h3 {
+            color: #34495e;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .card-description p {
+            color: #7f8c8d;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+        
+        .mock-element {
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            padding: 12px 20px;
+            margin: 8px 0;
+            backdrop-filter: blur(10px);
+            width: 80%;
+            text-align: center;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .mock-button {
+            background: white;
+            color: #d4674f;
+            border-radius: 25px;
+            padding: 12px 30px;
+            margin-top: 15px;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .face-cluster {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            display: inline-block;
+            margin: 5px;
+            border: 3px solid white;
+        }
+        
+        .contact-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 20px;
+            width: 85%;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+        
+        .contact-name {
+            color: #2c3e50;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .contact-detail {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin: 4px 0;
+        }
+        
+        .action-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        
+        .action-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏠 Hearth</h1>
+        <p class="tagline">Your thoughtful companion for meaningful connections</p>
+        
+        <!-- ONBOARDING FLOW -->
+        <div class="flow-section">
+            <h2 class="flow-title">Flow 1: Initial Setup & Onboarding</h2>
+            <div class="storyboard-grid">
+                
+                <div class="storyboard-card">
+                    <div class="card-number">Step 1: Welcome</div>
+                    <div class="card-screen screen-welcome">
+                        <div class="screen-icon">🏠</div>
+                        <div class="screen-title">Welcome to Hearth</div>
+                        <div class="screen-subtitle">A thoughtful assistant for staying connected with the people who matter most</div>
+                        <div class="mock-button">Get Started</div>
+                    </div>
+                    <div class="card-description">
+                        <h3>First Launch</h3>
+                        <p>Warm, welcoming introduction that sets the tone. Explains the core value: helping you nurture relationships through thoughtful reminders and gentle nudges.</p>
+                    </div>
+                </div>
+                
+                <div class="storyboard-card">
+                    <div class="card-number">Step 2: Permissions</div>
+                    <div class="card-screen screen-permissions">
+                        <div class="screen-icon">🔐</div>
+                        <div class="screen-title">We Need Your Permission</div>
+                        <div class="mock-element">📸 Photos</div>
+                        <div class="mock-element">👥 Contacts</div>
+                        <div class="mock-element">📍 Location</div>
+                        <div class="mock-element">📅 Calendar</div>
+                        <div class="screen-subtitle" style="margin-top: 15px;">Everything stays private on your device</div>
+                    </div>
+                    <div class="card-description">
+                        <h3>Privacy-First Permissions</h3>
+                        <p>Clear explanation of what data is needed and why. Emphasizes local processing and privacy. Users can proceed even if they deny some permissions.</p>
+                    </div>
+                </div>
+                
+                <div class="storyboard-card">
+                    <div class="card-number">Step 3: Analyzing Photos</div>
+                    <div class="card-screen screen-photos">
+                        <div class="screen-icon">🎭</div>
+                        <div class="screen-title">Finding Your People</div>
+                        <div style="margin: 20px 0;">
+                            <div class="face-cluster"></div>
+                            <div class="face-cluster"></div>
+                            <div class="face-cluster"></div>
+                            <div class="face-cluster"></div>
+                        </div>
+                        <div class="screen-subtitle">Analyzing 2,847 photos...<br>Detected 12 important people</div>
+                    </div>
+                    <div class="card-description">
+                        <h3>Photo Analysis</h3>
+                        <p>App uses Vision framework to detect and cluster faces. Progress indicator shows it's working. Creates clusters of people who appear frequently in photos.</p>
+                    </div>
+                </div>
+                
+                <div class="storyboard-card">
+                    <div class="card-number">Step 4: Identify People</div>
+                    <div class="card-screen screen-people">
+                        <div class="screen-icon">👤</div>
+                        <div class="screen-title">Who is this?</div>
+                        <div style="margin: 15px 0;">
+                            <div class="face-cluster" style="width: 100px; height: 100px;"></div>
+                        </div>
+                        <div class="screen-subtitle">247 photos • Last seen: Coffee shop, Oct 28</div>
+                        <div class="mock-element">Tap to select from contacts</div>
+                    </div>
+                    <div class="card-description">
+                        <h3>Manual Identification</h3>
+                        <p>Shows each cluster one at a time. User taps to link with a contact. Skippable if they don't recognize someone. Shows frequency and recency data.</p>
+                    </div>
+                </div>
+                
+                <div class="storyboard-card">
+                    <div class="card-number">Step 5: Identify Places</div>
+                    <div class="card-screen screen-places">
+                        <div class="screen-icon">📍</div>
+                        <div class="screen-title">Your Favorite Places</div>
+                        <div class="mock-element">📍 Joe's Coffee Shop<br><small>86 visits</small></div>
+                        <div class="mock-element">📍 Riverside Park<br><small>42 visits</small></div>
+                        <div class="mock-element">📍 Mom's House<br><small>28 visits</small></div>
+                        <div class="screen-subtitle">Would you like reminders for places you haven't visited lately?</div>
+                    </div>
+                    <div class="card-description">
+                        <h3>Location Intelligence</h3>
+                        <p>Shows frequently visited locations from photo metadata and location services. User can name them and set reminder preferences.</p>
+                    </div>
+                </div>
+                
+                <div class="storyboard-card">
+                    <div class="card-number">Step 6: Setup Complete</div>
+                    <div class="card-screen screen-welcome">
+                        <div class="screen-icon">✨</div>
+                        <div class="screen-title">All Set!</div>
+                        <div class="screen-subtitle">Hearth is learning your patterns.<br>We'll gently remind you when it's time to reach out to the people who matter.</div>
+                        <div class="mock-button">Go to Hearth</div>
+                    </div>
+                    <div class="card-description">
+                        <h3>Ready to Use</h3>
+                        <p>Confirmation that setup is complete. Sets expectations that the app will learn over time. Transitions to main launchpad experience.</p>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <!-- DAILY USE FLOW -->
+        <div class="flow-section">
+            <h2 class="flow-title">Flow 2: Daily Launchpad Experience</h2>
+            <div class="storyboard-grid">
+                
+                <div class="storyboard-card">
+                    <div class="card-number">Home: Morning View</div>
+                    <div class="card-screen screen-home">
+                        <div class="screen-title" style="font-size: 1.3em;">Good Morning ☀️</div>
+                        <div class="contact-card">
+                            <div class="contact-name">Sarah Mitchell</div>
+                            <div class="contact-detail">⏰ Last contact: 18 days ago</div>
+                            <div class="contact-detail">🎂 Birthday in 4 days</div>
+                            <div class="contact-detail">💡 You usually text every 2 weeks</div>
+                        </div>
+                        <div style="margin-top: 15px; font-size: 0.85em; color: rgba(0,0,0,0.5);">
+                            + 3 more people
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        <h3>The Launchpad</h3>
+                        <p>Opens to show prioritized contacts who need attention. Cards include context: time since last contact, upcoming dates, learned patterns. Simple, scannable interface.</p>
+                    </div>
+                </div>
+                
+                <div class="storyboard-card">
+                    <div class="card-number">Interaction: Tap Contact</div>
+                    <div class="card-screen screen-contact">
+                        <div class="contact-card" style="width: 90%; padding: 25px;">
+                            <div class="contact-name">Sarah Mitchell</div>
+                            <div class="contact-detail">📸 247 photos together</div>
+                            <div class="contact-detail">📍 Usually meet at Joe's Coffee</div>
+                            <div class="contact-detail">⏰ You call every Sunday around 10am</div>
+                            <div class="contact-detail">🎂 Birthday: November 8</div>
+                            <div class="action-icons">
+                                <div class="action-icon">💬</div>
+                                <div class="action-icon">📞</div>
+                                <div class="action-icon">📧</div>
+                                <div class="action-icon">📅</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        <h3>Contact Detail View</h3>
+                        <p>Shows relationship insights: photo count, favorite places together, learned communication patterns. Action buttons launch native iOS apps (Messages, Phone, Mail, Calendar).</p>
+                    </div>
+                </div>
+                
+                <div class="storyboard-card">
+                    <div class="card-number">Action: Launch Communication</div>
+                    <div class="card-screen screen-action">
+                        <div class="screen-icon">💬</div>
+                        <div class="screen-title">Opening Messages</div>
+                        <div class="screen-subtitle" style="margin-top: 20px;">
+                            Hearth will note that you<br>reached out to Sarah today
+                        </div>
+                        <div style="margin-top: 30px; font-size: 3em;">
+                            📱
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        <h3>Deep Links to Native Apps</h3>
+                        <p>Tapping an action launches the appropriate native iOS app (Messages, Phone, Mail, Calendar). Hearth logs the interaction to update patterns and reminders.</p>
+                    </div>
+                </div>
+                
+                <div class="storyboard-card">
+                    <div class="card-number">Notification: Gentle Reminder</div>
+                    <div class="card-screen screen-home">
+                        <div style="background: rgba(255,255,255,0.95); border-radius: 15px; padding: 20px; width: 85%; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                            <div style="font-size: 1.1em; font-weight: 600; color: #2c3e50; margin-bottom: 8px;">
+                                🌸 Thoughtful Reminder
+                            </div>
+                            <div style="color: #7f8c8d; line-height: 1.5; font-size: 0.9em;">
+                                Sarah's birthday is Thursday. Perhaps send flowers or a card?
+                            </div>
+                        </div>
+                        <div class="screen-subtitle" style="margin-top: 20px; color: rgba(0,0,0,0.6);">
+                            10:00 AM • Tuesday
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        <h3>1950s Style Notifications</h3>
+                        <p>Gentle, thoughtful notifications in the style of a personal assistant. Never pushy. Suggests specific actions. Timed appropriately (not 6am reminders).</p>
+                    </div>
+                </div>
+                
+                <div class="storyboard-card">
+                    <div class="card-number">Feature: Place Reminders</div>
+                    <div class="card-screen screen-places">
+                        <div class="contact-card" style="width: 90%;">
+                            <div style="font-size: 1.8em; margin-bottom: 10px;">☕</div>
+                            <div class="contact-name">Joe's Coffee Shop</div>
+                            <div class="contact-detail">Last visit: 3 months ago</div>
+                            <div class="contact-detail">You used to go weekly</div>
+                            <div class="contact-detail" style="margin-top: 12px; color: #d4674f; font-weight: 500;">
+                                You're nearby now. Drop in?
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        <h3>Location-Based Reminders</h3>
+                        <p>When near a place you haven't visited lately, get a gentle reminder. Helps you maintain routines and revisit favorite spots. Can be disabled per location.</p>
+                    </div>
+                </div>
+                
+                <div class="storyboard-card">
+                    <div class="card-number">Learning: Pattern Recognition</div>
+                    <div class="card-screen screen-home">
+                        <div style="background: rgba(255,255,255,0.95); border-radius: 15px; padding: 20px; width: 85%; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                            <div style="font-size: 1.1em; font-weight: 600; color: #2c3e50; margin-bottom: 12px;">
+                                📊 Patterns Learned
+                            </div>
+                            <div style="color: #7f8c8d; line-height: 1.8; font-size: 0.85em; text-align: left;">
+                                • You call Mom every Sunday morning<br>
+                                • Coffee with Sarah every 2 weeks<br>
+                                • Monthly dinner with Alex & Jordan<br>
+                                • You visit the gym 3x per week
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        <h3>Core ML Intelligence</h3>
+                        <p>Over time, Hearth learns your relationship patterns. Shows insights about your habits. Uses this to provide better, more contextual reminders.</p>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>

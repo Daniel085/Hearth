@@ -303,3 +303,27 @@ func clusteringIsDeterministic() {
         #expect(signature(FaceClusterer().cluster(faces)) == first)
     }
 }
+
+@Test("Merging clusters preserves every face exactly once")
+func mergingPreservesFaces() {
+    // Mirrors PhotoLibraryScanner.mergeClusters: combining groups must not drop or
+    // duplicate faces. A user merging a fragmented person then losing photos would be
+    // worse than the fragmentation.
+    let a = FaceCluster(faces: (0..<3).map { face(person: [0, 0, 0], jitter: Float($0) * 0.01, asset: "a\($0)") })
+    let b = FaceCluster(faces: (0..<2).map { face(person: [1, 0, 0], jitter: Float($0) * 0.01, asset: "b\($0)") })
+    let c = FaceCluster(faces: [face(person: [5, 0, 0], jitter: 0, asset: "c0")])
+
+    let clusters = [a, b, c]
+    let ids: Set<UUID> = [a.id, b.id]
+
+    let merged = FaceCluster(faces: clusters.filter { ids.contains($0.id) }.flatMap(\.faces))
+    let remaining = clusters.filter { !ids.contains($0.id) }
+
+    #expect(merged.faces.count == 5)
+    #expect(merged.assetCount == 5)
+    #expect(remaining.count == 1)
+
+    let all = (remaining + [merged]).flatMap { $0.faces.map(\.assetIdentifier) }
+    #expect(all.count == 6)
+    #expect(Set(all).count == 6)
+}

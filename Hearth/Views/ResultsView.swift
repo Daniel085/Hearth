@@ -10,7 +10,12 @@ struct ResultsView: View {
     let summary: PhotoLibraryScanner.ScanSummary
 
     @State private var threshold: Double = ClusteringParameters.default.mergeThreshold
-    @State private var showingDiagnostics = false
+    @State private var isSelecting = false
+    @State private var selected: Set<UUID> = []
+
+    private func toggle(_ id: UUID) {
+        if selected.contains(id) { selected.remove(id) } else { selected.insert(id) }
+    }
 
     var body: some View {
         List {
@@ -73,17 +78,63 @@ struct ResultsView: View {
                         .foregroundStyle(.secondary)
                 } else {
                     ForEach(scanner.clusters) { cluster in
-                        NavigationLink {
-                            ClusterDetailView(cluster: cluster)
-                        } label: {
-                            ClusterRow(cluster: cluster)
+                        if isSelecting {
+                            Button {
+                                toggle(cluster.id)
+                            } label: {
+                                HStack {
+                                    Image(systemName: selected.contains(cluster.id)
+                                          ? "checkmark.circle.fill" : "circle")
+                                        .foregroundStyle(selected.contains(cluster.id)
+                                                         ? AnyShapeStyle(.tint)
+                                                         : AnyShapeStyle(.secondary))
+                                    ClusterRow(cluster: cluster)
+                                }
+                            }
+                            .buttonStyle(.plain)
+                        } else {
+                            NavigationLink {
+                                ClusterDetailView(cluster: cluster)
+                            } label: {
+                                ClusterRow(cluster: cluster)
+                            }
                         }
                     }
                 }
             } header: {
-                Text("People found")
+                HStack {
+                    Text("People found")
+                    Spacer()
+                    if !scanner.clusters.isEmpty {
+                        Button(isSelecting ? "Done" : "Merge") {
+                            if isSelecting { selected.removeAll() }
+                            isSelecting.toggle()
+                        }
+                        .font(.caption.weight(.semibold))
+                        .textCase(nil)
+                    }
+                }
             } footer: {
-                Text("Groups are ranked by how often someone recurs over time, not by raw photo count.")
+                if isSelecting {
+                    Text("Select the groups that show the same person, then tap Merge. Faces that change a lot over time — babies especially — often arrive as several groups.")
+                } else {
+                    Text("Groups are ranked by how often someone recurs over time, not by raw photo count.")
+                }
+            }
+
+            if isSelecting && selected.count > 1 {
+                Section {
+                    Button {
+                        scanner.mergeClusters(ids: selected)
+                        selected.removeAll()
+                        isSelecting = false
+                    } label: {
+                        Text("Merge \(selected.count) groups into one")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .listRowBackground(Color.clear)
+                }
             }
         }
         .navigationTitle("Results")
