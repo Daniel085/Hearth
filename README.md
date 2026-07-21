@@ -57,16 +57,21 @@ Hearth embodies the ethos of a 1950s personal assistant:
 
 ## Current Status
 
-🎨 **Concept Phase** - Storyboards and initial design complete
+🔬 **Prototype Phase** - iOS app builds and runs; face clustering awaits validation against a real photo library
 
-[View Interactive Storyboards](./docs/storyboards.html)
+- [Data Model & Relationship Scoring](./docs/data-model.md)
+- [Vision Prototype Findings](./docs/vision-findings.md) — including a significant constraint: iOS Vision has no face-identity API
+- [Why we can't use the Photos People album](./docs/people-album-access.md)
+- [Vision FeaturePrint vs. a Core ML face model](./docs/core-ml-comparison.md) — accuracy, licensing, and legal exposure
+- [Running the validation scan](./docs/running-the-scan.md)
 
 ## Roadmap
 
-- [ ] Core data model design
-- [ ] Photo analysis prototype (Vision framework)
+- [x] Core data model design
+- [x] Photo analysis prototype (Vision framework)
+- [~] Scan + clustering app — builds and launches; needs a real-library scan to validate
 - [ ] Pattern learning system (Core ML)
-- [ ] SwiftUI interface implementation
+- [ ] SwiftUI Launchpad interface
 - [ ] Background processing setup
 - [ ] Beta testing with real users
 - [ ] App Store submission
