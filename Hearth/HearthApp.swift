@@ -14,8 +14,16 @@ struct HearthApp: App {
 
 struct RootView: View {
     var body: some View {
-        NavigationStack {
-            ScanView()
+        TabView {
+            NavigationStack {
+                LaunchpadView()
+            }
+            .tabItem { Label("Today", systemImage: "house") }
+
+            NavigationStack {
+                ScanView()
+            }
+            .tabItem { Label("People", systemImage: "person.2") }
         }
     }
 }

@@ -7,31 +7,35 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1C920D6828E3CE822BE07880 /* HearthApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F790BEA270F587C89358F198 /* HearthApp.swift */; };
+		A7BB9D6C8A0F2947D3D4FF64 /* HearthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029E91ABB30A602E39CC224F /* HearthModel.swift */; };
 		0E85BDE6756C9C7A3172FDCC /* PhotoLibraryScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF25E74484343398A1848BF /* PhotoLibraryScanner.swift */; };
 		10FCCAED47886C709B110279 /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398292841B21A7E450823161 /* ScanView.swift */; };
-		1C920D6828E3CE822BE07880 /* HearthApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F790BEA270F587C89358F198 /* HearthApp.swift */; };
-		676ECF8010DB051D34EC3258 /* DiagnosticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF758169DBB79B4AA98A5497 /* DiagnosticsView.swift */; };
-		A7BB9D6C8A0F2947D3D4FF64 /* HearthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029E91ABB30A602E39CC224F /* HearthModel.swift */; };
-		B6AB250BE45FDB59F09F387E /* VisionFaceExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7F8CB4A7A09522AFD97E4C /* VisionFaceExtractor.swift */; };
-		B729F083DBC7FB9BFD71DA35 /* FaceClusterer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DAFA5C1E0497203C374638 /* FaceClusterer.swift */; };
-		C4D128CC5443CEB6F12670B3 /* FaceDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DF157E1B4247CF1333AC2C5 /* FaceDescriptor.swift */; };
 		CEA638680F24F5D30DC3B8E3 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C453029BC64B96B990BF47CB /* ResultsView.swift */; };
+		676ECF8010DB051D34EC3258 /* DiagnosticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF758169DBB79B4AA98A5497 /* DiagnosticsView.swift */; };
+		7559F265555F5AA6B396F6E5 /* LaunchpadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837538B631E5EAF44492575A /* LaunchpadView.swift */; };
+		EED10153EC185F6BEECCADB5 /* RelationshipScoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FCCADCACBEC8F8AFE2CAF8 /* RelationshipScoring.swift */; };
+		C4D128CC5443CEB6F12670B3 /* FaceDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DF157E1B4247CF1333AC2C5 /* FaceDescriptor.swift */; };
+		B729F083DBC7FB9BFD71DA35 /* FaceClusterer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DAFA5C1E0497203C374638 /* FaceClusterer.swift */; };
+		B6AB250BE45FDB59F09F387E /* VisionFaceExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7F8CB4A7A09522AFD97E4C /* VisionFaceExtractor.swift */; };
 		EDE0E545907C7B5D48421E0F /* ClusteringEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4174C8E377D35B641B3ACE7A /* ClusteringEvaluator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		029E91ABB30A602E39CC224F /* HearthModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HearthModel.swift; path = Hearth/Models/HearthModel.swift; sourceTree = "<group>"; };
-		38A007151ABE87CC01A5B6E9 /* Hearth.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hearth.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		398292841B21A7E450823161 /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ScanView.swift; path = Hearth/Views/ScanView.swift; sourceTree = "<group>"; };
-		4174C8E377D35B641B3ACE7A /* ClusteringEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ClusteringEvaluator.swift; path = prototypes/FaceClustering/Sources/FaceClustering/ClusteringEvaluator.swift; sourceTree = "<group>"; };
-		5C7F8CB4A7A09522AFD97E4C /* VisionFaceExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VisionFaceExtractor.swift; path = prototypes/FaceClustering/Sources/FaceClustering/VisionFaceExtractor.swift; sourceTree = "<group>"; };
-		6FF25E74484343398A1848BF /* PhotoLibraryScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PhotoLibraryScanner.swift; path = Hearth/Vision/PhotoLibraryScanner.swift; sourceTree = "<group>"; };
-		9DF157E1B4247CF1333AC2C5 /* FaceDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FaceDescriptor.swift; path = prototypes/FaceClustering/Sources/FaceClustering/FaceDescriptor.swift; sourceTree = "<group>"; };
-		B5DAFA5C1E0497203C374638 /* FaceClusterer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FaceClusterer.swift; path = prototypes/FaceClustering/Sources/FaceClustering/FaceClusterer.swift; sourceTree = "<group>"; };
-		B714AE17F5D767B2D922EC4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Hearth/Resources/Info.plist; sourceTree = "<group>"; };
-		BF758169DBB79B4AA98A5497 /* DiagnosticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DiagnosticsView.swift; path = Hearth/Views/DiagnosticsView.swift; sourceTree = "<group>"; };
-		C453029BC64B96B990BF47CB /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ResultsView.swift; path = Hearth/Views/ResultsView.swift; sourceTree = "<group>"; };
-		F790BEA270F587C89358F198 /* HearthApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HearthApp.swift; path = Hearth/HearthApp.swift; sourceTree = "<group>"; };
+		F790BEA270F587C89358F198 /* HearthApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HearthApp.swift"; path = "Hearth/HearthApp.swift"; sourceTree = "<group>"; };
+		029E91ABB30A602E39CC224F /* HearthModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HearthModel.swift"; path = "Hearth/Models/HearthModel.swift"; sourceTree = "<group>"; };
+		6FF25E74484343398A1848BF /* PhotoLibraryScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PhotoLibraryScanner.swift"; path = "Hearth/Vision/PhotoLibraryScanner.swift"; sourceTree = "<group>"; };
+		398292841B21A7E450823161 /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ScanView.swift"; path = "Hearth/Views/ScanView.swift"; sourceTree = "<group>"; };
+		C453029BC64B96B990BF47CB /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ResultsView.swift"; path = "Hearth/Views/ResultsView.swift"; sourceTree = "<group>"; };
+		BF758169DBB79B4AA98A5497 /* DiagnosticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "DiagnosticsView.swift"; path = "Hearth/Views/DiagnosticsView.swift"; sourceTree = "<group>"; };
+		837538B631E5EAF44492575A /* LaunchpadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "LaunchpadView.swift"; path = "Hearth/Views/LaunchpadView.swift"; sourceTree = "<group>"; };
+		83FCCADCACBEC8F8AFE2CAF8 /* RelationshipScoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RelationshipScoring.swift"; path = "Hearth/Scoring/RelationshipScoring.swift"; sourceTree = "<group>"; };
+		9DF157E1B4247CF1333AC2C5 /* FaceDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FaceDescriptor.swift"; path = "prototypes/FaceClustering/Sources/FaceClustering/FaceDescriptor.swift"; sourceTree = "<group>"; };
+		B5DAFA5C1E0497203C374638 /* FaceClusterer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FaceClusterer.swift"; path = "prototypes/FaceClustering/Sources/FaceClustering/FaceClusterer.swift"; sourceTree = "<group>"; };
+		5C7F8CB4A7A09522AFD97E4C /* VisionFaceExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "VisionFaceExtractor.swift"; path = "prototypes/FaceClustering/Sources/FaceClustering/VisionFaceExtractor.swift"; sourceTree = "<group>"; };
+		4174C8E377D35B641B3ACE7A /* ClusteringEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ClusteringEvaluator.swift"; path = "prototypes/FaceClustering/Sources/FaceClustering/ClusteringEvaluator.swift"; sourceTree = "<group>"; };
+		B714AE17F5D767B2D922EC4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info.plist"; path = "Hearth/Resources/Info.plist"; sourceTree = "<group>"; };
+		38A007151ABE87CC01A5B6E9 /* Hearth.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Hearth.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,17 +67,11 @@
 				398292841B21A7E450823161 /* ScanView.swift */,
 				C453029BC64B96B990BF47CB /* ResultsView.swift */,
 				BF758169DBB79B4AA98A5497 /* DiagnosticsView.swift */,
+				837538B631E5EAF44492575A /* LaunchpadView.swift */,
+				83FCCADCACBEC8F8AFE2CAF8 /* RelationshipScoring.swift */,
 				B714AE17F5D767B2D922EC4C /* Info.plist */,
 			);
 			name = Hearth;
-			sourceTree = "<group>";
-		};
-		BFE00B156DCFC34C4751A6E5 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				38A007151ABE87CC01A5B6E9 /* Hearth.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		E309B9949AC26E0E0960539A /* FaceClustering */ = {
@@ -87,12 +85,20 @@
 			name = FaceClustering;
 			sourceTree = "<group>";
 		};
+		BFE00B156DCFC34C4751A6E5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				38A007151ABE87CC01A5B6E9 /* Hearth.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
 		0E8A3AD980EC179856012B7E /* Hearth */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 19686B93845676A0A658F517 /* Build configuration list for PBXNativeTarget "Hearth" */;
+			buildConfigurationList = 19686B93845676A0A658F517;
 			buildPhases = (
 				72A8017E75795FC05F78F54C /* Sources */,
 				F01580CCB5F725E4E879D491 /* Frameworks */,
@@ -122,8 +128,7 @@
 					};
 				};
 			};
-			buildConfigurationList = C86E21BCC985F56ECED9C5C4 /* Build configuration list for PBXProject "Hearth" */;
-			compatibilityVersion = "Xcode 14.0";
+			buildConfigurationList = C86E21BCC985F56ECED9C5C4;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -161,6 +166,8 @@
 				10FCCAED47886C709B110279 /* ScanView.swift in Sources */,
 				CEA638680F24F5D30DC3B8E3 /* ResultsView.swift in Sources */,
 				676ECF8010DB051D34EC3258 /* DiagnosticsView.swift in Sources */,
+				7559F265555F5AA6B396F6E5 /* LaunchpadView.swift in Sources */,
+				EED10153EC185F6BEECCADB5 /* RelationshipScoring.swift in Sources */,
 				C4D128CC5443CEB6F12670B3 /* FaceDescriptor.swift in Sources */,
 				B729F083DBC7FB9BFD71DA35 /* FaceClusterer.swift in Sources */,
 				B6AB250BE45FDB59F09F387E /* VisionFaceExtractor.swift in Sources */,
@@ -171,16 +178,52 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		D877646E137D89570CFB8251 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				SDKROOT = iphoneos;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		8871435814844F5947ADBB2C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				SDKROOT = iphoneos;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		18DCB30A68F4AFA5DA444758 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = EB25CFP6UQ;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = Hearth/Resources/Info.plist;
+				INFOPLIST_FILE = "Hearth/Resources/Info.plist";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -188,7 +231,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.danielororke.Hearth;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.danielororke.Hearth";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -202,10 +245,10 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = EB25CFP6UQ;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = Hearth/Resources/Info.plist;
+				INFOPLIST_FILE = "Hearth/Resources/Info.plist";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -213,7 +256,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.danielororke.Hearth;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.danielororke.Hearth";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -221,59 +264,23 @@
 			};
 			name = Release;
 		};
-		8871435814844F5947ADBB2C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				SDKROOT = iphoneos;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		D877646E137D89570CFB8251 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-			};
-			name = Debug;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		19686B93845676A0A658F517 /* Build configuration list for PBXNativeTarget "Hearth" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				18DCB30A68F4AFA5DA444758 /* Debug */,
-				4E31F9F05639A422599E8F78 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		C86E21BCC985F56ECED9C5C4 /* Build configuration list for PBXProject "Hearth" */ = {
+		C86E21BCC985F56ECED9C5C4 = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D877646E137D89570CFB8251 /* Debug */,
 				8871435814844F5947ADBB2C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		19686B93845676A0A658F517 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				18DCB30A68F4AFA5DA444758 /* Debug */,
+				4E31F9F05639A422599E8F78 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
