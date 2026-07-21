@@ -91,19 +91,6 @@ iOSInjectionProject/
 
 # macOS
 .DS_Store
-```
 
-## File 3: `docs/storyboards.html`
-First create a `docs` folder inside your Hearth folder, then save this file as `storyboards.html`:
-
-I'll click on the first artifact "Hearth App - User Flow Storyboards" above and you can copy the entire HTML content from there. It's the large interactive storyboard visualization we created.
-
----
-
-## Your Folder Structure Should Look Like:
-```
-Hearth/
-├── README.md
-├── .gitignore
-└── docs/
-    └── storyboards.html
+# Swift Package Manager build artifacts
+prototypes/*/.build/
