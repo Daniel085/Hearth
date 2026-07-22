@@ -16,6 +16,8 @@
 		676ECF8010DB051D34EC3258 /* DiagnosticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF758169DBB79B4AA98A5497 /* DiagnosticsView.swift */; };
 		7559F265555F5AA6B396F6E5 /* LaunchpadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837538B631E5EAF44492575A /* LaunchpadView.swift */; };
 		6C63413074D253593388B31B /* AddPersonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E86DBCD2B5CC24FEB94427 /* AddPersonView.swift */; };
+		E29E267DD57E5D30C96451AB /* PeopleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE26B92B1E800F9A47F22821 /* PeopleListView.swift */; };
+		574AFCD73A49163F851B0A66 /* PersonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3684EDFCA60303929E97E6 /* PersonDetailView.swift */; };
 		EED10153EC185F6BEECCADB5 /* RelationshipScoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FCCADCACBEC8F8AFE2CAF8 /* RelationshipScoring.swift */; };
 		C4D128CC5443CEB6F12670B3 /* FaceDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DF157E1B4247CF1333AC2C5 /* FaceDescriptor.swift */; };
 		B729F083DBC7FB9BFD71DA35 /* FaceClusterer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DAFA5C1E0497203C374638 /* FaceClusterer.swift */; };
@@ -33,6 +35,8 @@
 		BF758169DBB79B4AA98A5497 /* DiagnosticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "DiagnosticsView.swift"; path = "Hearth/Views/DiagnosticsView.swift"; sourceTree = "<group>"; };
 		837538B631E5EAF44492575A /* LaunchpadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "LaunchpadView.swift"; path = "Hearth/Views/LaunchpadView.swift"; sourceTree = "<group>"; };
 		48E86DBCD2B5CC24FEB94427 /* AddPersonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "AddPersonView.swift"; path = "Hearth/Views/AddPersonView.swift"; sourceTree = "<group>"; };
+		EE26B92B1E800F9A47F22821 /* PeopleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PeopleListView.swift"; path = "Hearth/Views/PeopleListView.swift"; sourceTree = "<group>"; };
+		CD3684EDFCA60303929E97E6 /* PersonDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PersonDetailView.swift"; path = "Hearth/Views/PersonDetailView.swift"; sourceTree = "<group>"; };
 		83FCCADCACBEC8F8AFE2CAF8 /* RelationshipScoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RelationshipScoring.swift"; path = "Hearth/Scoring/RelationshipScoring.swift"; sourceTree = "<group>"; };
 		9DF157E1B4247CF1333AC2C5 /* FaceDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FaceDescriptor.swift"; path = "prototypes/FaceClustering/Sources/FaceClustering/FaceDescriptor.swift"; sourceTree = "<group>"; };
 		B5DAFA5C1E0497203C374638 /* FaceClusterer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FaceClusterer.swift"; path = "prototypes/FaceClustering/Sources/FaceClustering/FaceClusterer.swift"; sourceTree = "<group>"; };
@@ -74,6 +78,8 @@
 				BF758169DBB79B4AA98A5497 /* DiagnosticsView.swift */,
 				837538B631E5EAF44492575A /* LaunchpadView.swift */,
 				48E86DBCD2B5CC24FEB94427 /* AddPersonView.swift */,
+				EE26B92B1E800F9A47F22821 /* PeopleListView.swift */,
+				CD3684EDFCA60303929E97E6 /* PersonDetailView.swift */,
 				83FCCADCACBEC8F8AFE2CAF8 /* RelationshipScoring.swift */,
 				B714AE17F5D767B2D922EC4C /* Info.plist */,
 			);
@@ -175,6 +181,8 @@
 				676ECF8010DB051D34EC3258 /* DiagnosticsView.swift in Sources */,
 				7559F265555F5AA6B396F6E5 /* LaunchpadView.swift in Sources */,
 				6C63413074D253593388B31B /* AddPersonView.swift in Sources */,
+				E29E267DD57E5D30C96451AB /* PeopleListView.swift in Sources */,
+				574AFCD73A49163F851B0A66 /* PersonDetailView.swift in Sources */,
 				EED10153EC185F6BEECCADB5 /* RelationshipScoring.swift in Sources */,
 				C4D128CC5443CEB6F12670B3 /* FaceDescriptor.swift in Sources */,
 				B729F083DBC7FB9BFD71DA35 /* FaceClusterer.swift in Sources */,

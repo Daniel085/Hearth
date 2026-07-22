@@ -17,9 +17,14 @@ struct LaunchpadView: View {
             } else {
                 List {
                     ForEach(model.people) { person in
-                        LaunchpadCard(person: person) { action in
-                            model.perform(action, for: person)
+                        NavigationLink {
+                            PersonDetailView(personID: person.personID)
+                        } label: {
+                            LaunchpadCard(person: person) { action in
+                                model.perform(action, for: person)
+                            }
                         }
+                        .buttonStyle(.plain)
                         .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                         .listRowSeparator(.hidden)
                     }

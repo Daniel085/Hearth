@@ -165,6 +165,71 @@ final class PersonStore: ObservableObject {
         save()
     }
 
+    /// Sets a per-person contact interval, or nil to fall back to the tier default.
+    func setCadenceTargetDays(_ days: Int?, for person: CDPerson) {
+        person.cadenceTargetDays = days.map(NSNumber.init)
+        person.updatedAt = Date()
+        save()
+    }
+
+    func setDisplayName(_ name: String, for person: CDPerson) {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        person.displayName = trimmed
+        person.updatedAt = Date()
+        save()
+    }
+
+    func setBirthday(_ date: Date?, for person: CDPerson) {
+        person.birthday = date
+        person.updatedAt = Date()
+        save()
+    }
+
+    /// Interactions newest first.
+    func interactions(for person: CDPerson) -> [CDInteraction] {
+        let set = person.interactions as? Set<CDInteraction> ?? []
+        return set.sorted { $0.date > $1.date }
+    }
+
+    /// Distinct photos this person appears in, across all their face groups.
+    ///
+    /// Counts distinct assets rather than faces: twelve faces from one burst is one
+    /// photo of evidence, not twelve.
+    func photoCount(for person: CDPerson) -> Int {
+        let appearances = person.appearances as? Set<CDPhotoAppearance> ?? []
+        return Set(appearances.map(\.localIdentifier)).count
+    }
+
+    /// Span of photos containing this person, for "known since" context.
+    func photoDateRange(for person: CDPerson) -> ClosedRange<Date>? {
+        let appearances = person.appearances as? Set<CDPhotoAppearance> ?? []
+        let dates = appearances.compactMap(\.captureDate).sorted()
+        guard let first = dates.first, let last = dates.last else { return nil }
+        return first...last
+    }
+
+    /// Photo identifiers for a face group, oldest first, for the thumbnail strip.
+    func appearances(in group: CDFaceGroup) -> [CDPhotoAppearance] {
+        let set = group.appearances as? Set<CDPhotoAppearance> ?? []
+        return set.sorted { ($0.captureDate ?? .distantPast) < ($1.captureDate ?? .distantPast) }
+    }
+
+    /// Detaches a face group from its person, without deleting the photo records.
+    ///
+    /// The correction for a group assigned to the wrong person. It becomes unassigned
+    /// rather than destroyed, so the underlying scan data survives.
+    func detach(_ group: CDFaceGroup) {
+        group.person = nil
+        let appearances = group.appearances as? Set<CDPhotoAppearance> ?? []
+        for appearance in appearances {
+            appearance.person = nil
+            appearance.faceGroup = nil
+        }
+        context.delete(group)
+        save()
+    }
+
     /// Deletes a person and everything derived from them.
     ///
     /// Face groups and interactions cascade. This has to be a real delete, not a hidden

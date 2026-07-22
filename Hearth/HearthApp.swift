@@ -21,9 +21,14 @@ struct RootView: View {
             .tabItem { Label("Today", systemImage: "house") }
 
             NavigationStack {
-                ScanView()
+                PeopleListView()
             }
             .tabItem { Label("People", systemImage: "person.2") }
+
+            NavigationStack {
+                ScanView()
+            }
+            .tabItem { Label("Photos", systemImage: "photo.on.rectangle") }
         }
     }
 }
