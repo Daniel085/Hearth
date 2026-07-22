@@ -1,4 +1,5 @@
 import CoreData
+import Contacts
 import Foundation
 
 /// Reads and writes `Person` records.
@@ -243,23 +244,71 @@ final class PersonStore: ObservableObject {
     // MARK: - Scoring bridge
 
     /// Snapshots every person into the plain values the scorer expects.
-    func scoringInputs(now: Date = Date()) -> [ScoringInput] {
+    ///
+    /// `upcomingEvents` is passed in rather than fetched here: the calendar lives behind
+    /// its own permission and its own service, and keeping this method free of EventKit
+    /// means it stays testable with plain values.
+    func scoringInputs(
+        now: Date = Date(),
+        upcomingEvents: [UUID: UpcomingEvent] = [:]
+    ) -> [ScoringInput] {
         allPeople().map { person in
-            ScoringInput(
+            let event = upcomingEvents[person.id]
+            return ScoringInput(
                 personID: person.id,
                 displayName: person.displayName ?? "Unknown",
                 tier: RelationshipTier(rawValue: person.tier) ?? .close,
                 cadenceTargetDays: person.cadenceTargetDays?.intValue,
                 lastInteraction: lastInteraction(for: person),
                 birthday: person.birthday,
-                upcomingEventDate: nil,      // EventKit not wired yet
-                upcomingEventTitle: nil,
+                upcomingEventDate: event?.date,
+                upcomingEventTitle: event?.title,
                 isNearAssociatedPlace: false, // Core Location not wired yet
                 nearbyPlaceName: nil,
                 unactionedAppearances: 0,     // needs Signal history
                 isMuted: person.isMuted
             )
         }
+    }
+
+    /// Matches a set of event attendees to a person, by contact link first, then name.
+    ///
+    /// Contact identity is more reliable than a display name — two people can share a
+    /// first name, and calendar names are often just "Mum" or a raw email local-part.
+    /// Falls back to case-insensitive exact name match, which is good enough for the
+    /// common case and never wrong in the confident direction (a partial-name match could
+    /// attach "Sam Smith"'s dinner to "Sam Jones", so we don't do partials).
+    func matchPerson(to attendees: EventAttendees) -> UUID? {
+        let people = allPeople()
+
+        // 1. By linked contact email.
+        if !attendees.emails.isEmpty {
+            let emailSet = Set(attendees.emails.map { $0.lowercased() })
+            for person in people {
+                guard let identifier = person.contactIdentifier,
+                      let contactEmails = contactEmails(for: identifier), !contactEmails.isEmpty
+                else { continue }
+                if !contactEmails.isDisjoint(with: emailSet) { return person.id }
+            }
+        }
+
+        // 2. By exact, case-insensitive name.
+        let nameSet = Set(attendees.names.map { $0.lowercased() })
+        for person in people {
+            if let name = person.displayName?.lowercased(), nameSet.contains(name) {
+                return person.id
+            }
+        }
+
+        return nil
+    }
+
+    private func contactEmails(for identifier: String) -> Set<String>? {
+        let keys = [CNContactEmailAddressesKey as CNKeyDescriptor]
+        guard let contact = try? CNContactStore().unifiedContact(
+            withIdentifier: identifier, keysToFetch: keys
+        ) else { return nil }
+        return Set(contact.emailAddresses.map { ($0.value as String).lowercased() })
     }
 
     private func save() {

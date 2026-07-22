@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0E85BDE6756C9C7A3172FDCC /* PhotoLibraryScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF25E74484343398A1848BF /* PhotoLibraryScanner.swift */; };
+		78DFD799D65F9DB4303FA5DA /* CalendarService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB67AEA02742B6FAFB12FC15 /* CalendarService.swift */; };
 		10FCCAED47886C709B110279 /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398292841B21A7E450823161 /* ScanView.swift */; };
 		1C920D6828E3CE822BE07880 /* HearthApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F790BEA270F587C89358F198 /* HearthApp.swift */; };
 		574AFCD73A49163F851B0A66 /* PersonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3684EDFCA60303929E97E6 /* PersonDetailView.swift */; };
@@ -33,6 +34,7 @@
 		48E86DBCD2B5CC24FEB94427 /* AddPersonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddPersonView.swift; path = Hearth/Views/AddPersonView.swift; sourceTree = "<group>"; };
 		5C7F8CB4A7A09522AFD97E4C /* VisionFaceExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VisionFaceExtractor.swift; path = prototypes/FaceClustering/Sources/FaceClustering/VisionFaceExtractor.swift; sourceTree = "<group>"; };
 		6FF25E74484343398A1848BF /* PhotoLibraryScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PhotoLibraryScanner.swift; path = Hearth/Vision/PhotoLibraryScanner.swift; sourceTree = "<group>"; };
+		FB67AEA02742B6FAFB12FC15 /* CalendarService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CalendarService.swift"; path = "Hearth/Vision/CalendarService.swift"; sourceTree = "<group>"; };
 		7138214CC13D188052B81AFF /* PersonStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PersonStore.swift; path = Hearth/Models/PersonStore.swift; sourceTree = "<group>"; };
 		837538B631E5EAF44492575A /* LaunchpadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LaunchpadView.swift; path = Hearth/Views/LaunchpadView.swift; sourceTree = "<group>"; };
 		83FCCADCACBEC8F8AFE2CAF8 /* RelationshipScoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RelationshipScoring.swift; path = Hearth/Scoring/RelationshipScoring.swift; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 				029E91ABB30A602E39CC224F /* HearthModel.swift */,
 				7138214CC13D188052B81AFF /* PersonStore.swift */,
 				6FF25E74484343398A1848BF /* PhotoLibraryScanner.swift */,
+				FB67AEA02742B6FAFB12FC15 /* CalendarService.swift */,
 				398292841B21A7E450823161 /* ScanView.swift */,
 				C453029BC64B96B990BF47CB /* ResultsView.swift */,
 				BF758169DBB79B4AA98A5497 /* DiagnosticsView.swift */,
@@ -177,6 +180,7 @@
 				A7BB9D6C8A0F2947D3D4FF64 /* HearthModel.swift in Sources */,
 				C35179E018B380438FF90C86 /* PersonStore.swift in Sources */,
 				0E85BDE6756C9C7A3172FDCC /* PhotoLibraryScanner.swift in Sources */,
+				78DFD799D65F9DB4303FA5DA /* CalendarService.swift in Sources */,
 				10FCCAED47886C709B110279 /* ScanView.swift in Sources */,
 				CEA638680F24F5D30DC3B8E3 /* ResultsView.swift in Sources */,
 				676ECF8010DB051D34EC3258 /* DiagnosticsView.swift in Sources */,

@@ -57,6 +57,7 @@ struct LaunchpadView: View {
             Text(model.actionError ?? "")
         }
         .onAppear { model.refresh() }
+        .task { await model.requestCalendarIfNeeded() }
     }
 
     /// Two different empty states: nobody added yet, versus nobody due today.
@@ -170,11 +171,29 @@ final class LaunchpadModel: ObservableObject {
     private let scorer = RelationshipScorer()
     private let store = PersonStore()
     private let launcher = ContactLauncher()
+    private let calendar = CalendarService()
 
     var isEmpty: Bool { store.allPeople().isEmpty }
 
     func refresh() {
-        people = scorer.rank(store.scoringInputs(), now: Date())
+        // Fold in upcoming shared events when calendar access is granted. Absent access,
+        // this is simply empty and the other signals carry the ranking.
+        let events = calendar.upcomingEvents { attendees in
+            store.matchPerson(to: attendees)
+        }
+        people = scorer.rank(store.scoringInputs(upcomingEvents: events), now: Date())
+    }
+
+    /// Asks for calendar access if it hasn't been decided, then refreshes.
+    ///
+    /// Called on appear rather than at launch: the prompt arrives when the user is
+    /// looking at Today and the value is obvious, not during an onboarding they haven't
+    /// invested in yet.
+    func requestCalendarIfNeeded() async {
+        if calendar.access == .notDetermined {
+            _ = await calendar.requestAccess()
+            refresh()
+        }
     }
 
     func perform(_ action: LaunchpadAction, for scored: ScoredPerson) {

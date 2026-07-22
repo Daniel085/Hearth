@@ -24,6 +24,10 @@
 	<string>Hearth can look through your photos to find the people you spend time with. This is optional — you can add people from Contacts or by name instead. All analysis happens on this device, and no photos or data are ever uploaded.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Hearth uses your contacts so you can pick the people you want to stay close to, and so calls and messages can be started from the app. Contact details stay on your device.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Hearth reads your calendar to remind you about time with the people who matter — like an upcoming dinner or catch-up. This is optional, and your events stay on your device.</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>Hearth reads your calendar to remind you about time with the people who matter — like an upcoming dinner or catch-up. This is optional, and your events stay on your device.</string>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UISupportedInterfaceOrientations</key>
