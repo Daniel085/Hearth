@@ -14,8 +14,29 @@ struct ResultsView: View {
     @State private var selected: Set<UUID> = []
     @State private var nameTarget: Set<UUID>?
 
+    @StateObject private var store = PersonStore()
+
     private func toggle(_ id: UUID) {
         if selected.contains(id) { selected.remove(id) } else { selected.insert(id) }
+    }
+
+    /// Every person already in the store, so face groups can be added to someone who was
+    /// created from Contacts rather than from photos.
+    private var knownNames: [String] {
+        store.allPeople().compactMap(\.displayName).sorted()
+    }
+
+    /// Persists the selection as face groups on a person.
+    ///
+    /// The groups stay separate — attaching several to one person is the expected case,
+    /// not a merge. See docs/vision-findings.md §4e.
+    private func save(clusterIDs: Set<UUID>, as name: String) {
+        guard let person = store.findOrCreatePerson(named: name) else { return }
+        let snapshots = scanner.clusters
+            .filter { clusterIDs.contains($0.id) }
+            .map(FaceGroupSnapshot.init)
+        store.attachFaceGroups(snapshots, to: person)
+        scanner.assign(clusterIDs: clusterIDs, toPersonNamed: name)
     }
 
     var body: some View {
@@ -155,9 +176,9 @@ struct ResultsView: View {
         .sheet(item: $nameTarget) { target in
             NamePersonSheet(
                 groupCount: target.count,
-                existingNames: scanner.namedPeople.map(\.name)
+                existingNames: knownNames
             ) { name in
-                scanner.assign(clusterIDs: target, toPersonNamed: name)
+                save(clusterIDs: target, as: name)
                 selected.removeAll()
                 isSelecting = false
                 nameTarget = nil

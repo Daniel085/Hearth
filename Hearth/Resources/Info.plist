@@ -21,7 +21,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Hearth looks through your photos to find the people you spend time with. All analysis happens on this device — no photos or data are ever uploaded.</string>
+	<string>Hearth can look through your photos to find the people you spend time with. This is optional — you can add people from Contacts or by name instead. All analysis happens on this device, and no photos or data are ever uploaded.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Hearth uses your contacts so you can pick the people you want to stay close to, and so calls and messages can be started from the app. Contact details stay on your device.</string>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UISupportedInterfaceOrientations</key>

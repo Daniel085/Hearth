@@ -9,11 +9,13 @@
 /* Begin PBXBuildFile section */
 		1C920D6828E3CE822BE07880 /* HearthApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F790BEA270F587C89358F198 /* HearthApp.swift */; };
 		A7BB9D6C8A0F2947D3D4FF64 /* HearthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029E91ABB30A602E39CC224F /* HearthModel.swift */; };
+		C35179E018B380438FF90C86 /* PersonStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7138214CC13D188052B81AFF /* PersonStore.swift */; };
 		0E85BDE6756C9C7A3172FDCC /* PhotoLibraryScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF25E74484343398A1848BF /* PhotoLibraryScanner.swift */; };
 		10FCCAED47886C709B110279 /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 398292841B21A7E450823161 /* ScanView.swift */; };
 		CEA638680F24F5D30DC3B8E3 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C453029BC64B96B990BF47CB /* ResultsView.swift */; };
 		676ECF8010DB051D34EC3258 /* DiagnosticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF758169DBB79B4AA98A5497 /* DiagnosticsView.swift */; };
 		7559F265555F5AA6B396F6E5 /* LaunchpadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837538B631E5EAF44492575A /* LaunchpadView.swift */; };
+		6C63413074D253593388B31B /* AddPersonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E86DBCD2B5CC24FEB94427 /* AddPersonView.swift */; };
 		EED10153EC185F6BEECCADB5 /* RelationshipScoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FCCADCACBEC8F8AFE2CAF8 /* RelationshipScoring.swift */; };
 		C4D128CC5443CEB6F12670B3 /* FaceDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DF157E1B4247CF1333AC2C5 /* FaceDescriptor.swift */; };
 		B729F083DBC7FB9BFD71DA35 /* FaceClusterer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DAFA5C1E0497203C374638 /* FaceClusterer.swift */; };
@@ -24,11 +26,13 @@
 /* Begin PBXFileReference section */
 		F790BEA270F587C89358F198 /* HearthApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HearthApp.swift"; path = "Hearth/HearthApp.swift"; sourceTree = "<group>"; };
 		029E91ABB30A602E39CC224F /* HearthModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HearthModel.swift"; path = "Hearth/Models/HearthModel.swift"; sourceTree = "<group>"; };
+		7138214CC13D188052B81AFF /* PersonStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PersonStore.swift"; path = "Hearth/Models/PersonStore.swift"; sourceTree = "<group>"; };
 		6FF25E74484343398A1848BF /* PhotoLibraryScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PhotoLibraryScanner.swift"; path = "Hearth/Vision/PhotoLibraryScanner.swift"; sourceTree = "<group>"; };
 		398292841B21A7E450823161 /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ScanView.swift"; path = "Hearth/Views/ScanView.swift"; sourceTree = "<group>"; };
 		C453029BC64B96B990BF47CB /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ResultsView.swift"; path = "Hearth/Views/ResultsView.swift"; sourceTree = "<group>"; };
 		BF758169DBB79B4AA98A5497 /* DiagnosticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "DiagnosticsView.swift"; path = "Hearth/Views/DiagnosticsView.swift"; sourceTree = "<group>"; };
 		837538B631E5EAF44492575A /* LaunchpadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "LaunchpadView.swift"; path = "Hearth/Views/LaunchpadView.swift"; sourceTree = "<group>"; };
+		48E86DBCD2B5CC24FEB94427 /* AddPersonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "AddPersonView.swift"; path = "Hearth/Views/AddPersonView.swift"; sourceTree = "<group>"; };
 		83FCCADCACBEC8F8AFE2CAF8 /* RelationshipScoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RelationshipScoring.swift"; path = "Hearth/Scoring/RelationshipScoring.swift"; sourceTree = "<group>"; };
 		9DF157E1B4247CF1333AC2C5 /* FaceDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FaceDescriptor.swift"; path = "prototypes/FaceClustering/Sources/FaceClustering/FaceDescriptor.swift"; sourceTree = "<group>"; };
 		B5DAFA5C1E0497203C374638 /* FaceClusterer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FaceClusterer.swift"; path = "prototypes/FaceClustering/Sources/FaceClustering/FaceClusterer.swift"; sourceTree = "<group>"; };
@@ -63,11 +67,13 @@
 			children = (
 				F790BEA270F587C89358F198 /* HearthApp.swift */,
 				029E91ABB30A602E39CC224F /* HearthModel.swift */,
+				7138214CC13D188052B81AFF /* PersonStore.swift */,
 				6FF25E74484343398A1848BF /* PhotoLibraryScanner.swift */,
 				398292841B21A7E450823161 /* ScanView.swift */,
 				C453029BC64B96B990BF47CB /* ResultsView.swift */,
 				BF758169DBB79B4AA98A5497 /* DiagnosticsView.swift */,
 				837538B631E5EAF44492575A /* LaunchpadView.swift */,
+				48E86DBCD2B5CC24FEB94427 /* AddPersonView.swift */,
 				83FCCADCACBEC8F8AFE2CAF8 /* RelationshipScoring.swift */,
 				B714AE17F5D767B2D922EC4C /* Info.plist */,
 			);
@@ -162,11 +168,13 @@
 			files = (
 				1C920D6828E3CE822BE07880 /* HearthApp.swift in Sources */,
 				A7BB9D6C8A0F2947D3D4FF64 /* HearthModel.swift in Sources */,
+				C35179E018B380438FF90C86 /* PersonStore.swift in Sources */,
 				0E85BDE6756C9C7A3172FDCC /* PhotoLibraryScanner.swift in Sources */,
 				10FCCAED47886C709B110279 /* ScanView.swift in Sources */,
 				CEA638680F24F5D30DC3B8E3 /* ResultsView.swift in Sources */,
 				676ECF8010DB051D34EC3258 /* DiagnosticsView.swift in Sources */,
 				7559F265555F5AA6B396F6E5 /* LaunchpadView.swift in Sources */,
+				6C63413074D253593388B31B /* AddPersonView.swift in Sources */,
 				EED10153EC185F6BEECCADB5 /* RelationshipScoring.swift in Sources */,
 				C4D128CC5443CEB6F12670B3 /* FaceDescriptor.swift in Sources */,
 				B729F083DBC7FB9BFD71DA35 /* FaceClusterer.swift in Sources */,

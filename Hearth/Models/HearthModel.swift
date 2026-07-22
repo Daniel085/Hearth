@@ -8,6 +8,10 @@ import Foundation
 /// merges worse.
 enum HearthModel {
 
+    /// `NSManagedObjectModel` is not `Sendable`, but this instance is built once and only
+    /// read afterwards. Confined to the main actor so Swift 6 can verify that, rather
+    /// than left as an unchecked global.
+    @MainActor
     static let shared: NSManagedObjectModel = {
         let model = NSManagedObjectModel()
 
@@ -255,6 +259,7 @@ final class CDSignal: NSManagedObject {
 
 // MARK: - Stack
 
+@MainActor
 final class PersistenceController {
     static let shared = PersistenceController()
 
