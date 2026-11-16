@@ -24,6 +24,9 @@
 		E29E267DD57E5D30C96451AB /* PeopleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE26B92B1E800F9A47F22821 /* PeopleListView.swift */; };
 		EDE0E545907C7B5D48421E0F /* ClusteringEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4174C8E377D35B641B3ACE7A /* ClusteringEvaluator.swift */; };
 		EED10153EC185F6BEECCADB5 /* RelationshipScoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83FCCADCACBEC8F8AFE2CAF8 /* RelationshipScoring.swift */; };
+		A1C0FFEE00000000000000A1 /* LinkedInConnections.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C0FFEE00000000000000B1 /* LinkedInConnections.swift */; };
+		A1C0FFEE00000000000000A2 /* LinkedInImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C0FFEE00000000000000B2 /* LinkedInImportView.swift */; };
+		A1C0FFEE00000000000000A3 /* LinkedInSignals.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C0FFEE00000000000000B3 /* LinkedInSignals.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +49,9 @@
 		CD3684EDFCA60303929E97E6 /* PersonDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PersonDetailView.swift; path = Hearth/Views/PersonDetailView.swift; sourceTree = "<group>"; };
 		EE26B92B1E800F9A47F22821 /* PeopleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PeopleListView.swift; path = Hearth/Views/PeopleListView.swift; sourceTree = "<group>"; };
 		F790BEA270F587C89358F198 /* HearthApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HearthApp.swift; path = Hearth/HearthApp.swift; sourceTree = "<group>"; };
+		A1C0FFEE00000000000000B1 /* LinkedInConnections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LinkedInConnections.swift; path = Hearth/Import/LinkedInConnections.swift; sourceTree = "<group>"; };
+		A1C0FFEE00000000000000B2 /* LinkedInImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LinkedInImportView.swift; path = Hearth/Views/LinkedInImportView.swift; sourceTree = "<group>"; };
+		A1C0FFEE00000000000000B3 /* LinkedInSignals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LinkedInSignals.swift; path = Hearth/Import/LinkedInSignals.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +89,9 @@
 				48E86DBCD2B5CC24FEB94427 /* AddPersonView.swift */,
 				EE26B92B1E800F9A47F22821 /* PeopleListView.swift */,
 				CD3684EDFCA60303929E97E6 /* PersonDetailView.swift */,
+				A1C0FFEE00000000000000B2 /* LinkedInImportView.swift */,
+				A1C0FFEE00000000000000B1 /* LinkedInConnections.swift */,
+				A1C0FFEE00000000000000B3 /* LinkedInSignals.swift */,
 				83FCCADCACBEC8F8AFE2CAF8 /* RelationshipScoring.swift */,
 				B714AE17F5D767B2D922EC4C /* Info.plist */,
 			);
@@ -188,6 +197,9 @@
 				6C63413074D253593388B31B /* AddPersonView.swift in Sources */,
 				E29E267DD57E5D30C96451AB /* PeopleListView.swift in Sources */,
 				574AFCD73A49163F851B0A66 /* PersonDetailView.swift in Sources */,
+				A1C0FFEE00000000000000A2 /* LinkedInImportView.swift in Sources */,
+				A1C0FFEE00000000000000A1 /* LinkedInConnections.swift in Sources */,
+				A1C0FFEE00000000000000A3 /* LinkedInSignals.swift in Sources */,
 				EED10153EC185F6BEECCADB5 /* RelationshipScoring.swift in Sources */,
 				C4D128CC5443CEB6F12670B3 /* FaceDescriptor.swift in Sources */,
 				B729F083DBC7FB9BFD71DA35 /* FaceClusterer.swift in Sources */,

@@ -12,24 +12,49 @@ enum HearthModel {
     /// read afterwards. Confined to the main actor so Swift 6 can verify that, rather
     /// than left as an unchecked global.
     @MainActor
-    static let shared: NSManagedObjectModel = {
+    static let shared: NSManagedObjectModel = make(version: currentVersion)
+
+    /// Bump when the schema changes, and gate the new properties on the version in
+    /// `make(version:)` so every earlier schema can still be rebuilt for migration.
+    static let currentVersion = 2
+
+    /// Every schema this app has shipped, oldest first.
+    ///
+    /// Because the model is built in code there is no `.xcdatamodeld` bundle for Core
+    /// Data to find old versions in, so automatic lightweight migration can't work: it
+    /// would fail to locate the source model and the store would refuse to open. Keeping
+    /// each version reconstructible lets `PersistenceController` migrate explicitly.
+    @MainActor
+    static let history: [NSManagedObjectModel] =
+        (1..<currentVersion).map { make(version: $0) } + [shared]
+
+    /// Version history:
+    /// 1. Initial schema.
+    /// 2. Person gains work details and LinkedIn link, from the Connections import.
+    static func make(version: Int) -> NSManagedObjectModel {
         let model = NSManagedObjectModel()
+        model.versionIdentifiers = ["\(version)"]
+        // Only the live model maps to the `CD…` subclasses. If past versions did too,
+        // `CDPerson.entity()` would find several matches and inserts could pick the
+        // wrong one. Class names aren't part of the version hash, so migration still
+        // matches past stores.
+        let isCurrent = version == currentVersion
 
         let person = NSEntityDescription()
         person.name = "CDPerson"
-        person.managedObjectClassName = "CDPerson"
+        if isCurrent { person.managedObjectClassName = "CDPerson" }
 
         let interaction = NSEntityDescription()
         interaction.name = "CDInteraction"
-        interaction.managedObjectClassName = "CDInteraction"
+        if isCurrent { interaction.managedObjectClassName = "CDInteraction" }
 
         let appearance = NSEntityDescription()
         appearance.name = "CDPhotoAppearance"
-        appearance.managedObjectClassName = "CDPhotoAppearance"
+        if isCurrent { appearance.managedObjectClassName = "CDPhotoAppearance" }
 
         let signal = NSEntityDescription()
         signal.name = "CDSignal"
-        signal.managedObjectClassName = "CDSignal"
+        if isCurrent { signal.managedObjectClassName = "CDSignal" }
 
         // A face cluster, owned by a Person. One Person may own many.
         //
@@ -43,7 +68,7 @@ enum HearthModel {
         // See docs/vision-findings.md §4e.
         let faceGroup = NSEntityDescription()
         faceGroup.name = "CDFaceGroup"
-        faceGroup.managedObjectClassName = "CDFaceGroup"
+        if isCurrent { faceGroup.managedObjectClassName = "CDFaceGroup" }
 
         person.properties = [
             attr("id", .UUIDAttributeType),
@@ -57,6 +82,15 @@ enum HearthModel {
             attr("createdAt", .dateAttributeType),
             attr("updatedAt", .dateAttributeType),
         ]
+        if version >= 2 {
+            person.properties += [
+                attr("organization", .stringAttributeType, optional: true),
+                attr("jobTitle", .stringAttributeType, optional: true),
+                attr("linkedInURL", .stringAttributeType, optional: true),
+                // When the user connected with them on LinkedIn — "known since" context.
+                attr("connectedOn", .dateAttributeType, optional: true),
+            ]
+        }
 
         interaction.properties = [
             attr("id", .UUIDAttributeType),
@@ -132,7 +166,7 @@ enum HearthModel {
 
         model.entities = [person, interaction, appearance, signal, faceGroup]
         return model
-    }()
+    }
 
     private static func attr(
         _ name: String,
@@ -194,6 +228,10 @@ final class CDPerson: NSManagedObject {
     @NSManaged var isMuted: Bool
     @NSManaged var createdAt: Date
     @NSManaged var updatedAt: Date
+    @NSManaged var organization: String?
+    @NSManaged var jobTitle: String?
+    @NSManaged var linkedInURL: String?
+    @NSManaged var connectedOn: Date?
     @NSManaged var interactions: NSSet?
     @NSManaged var appearances: NSSet?
     @NSManaged var signals: NSSet?
@@ -270,6 +308,13 @@ final class PersistenceController {
 
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
+        } else if let url = container.persistentStoreDescriptions.first?.url {
+            do {
+                try Self.migrateIfNeeded(storeAt: url)
+            } catch {
+                // Left to the load below, which fails loudly with the store's real error.
+                print("Hearth store migration failed: \(error)")
+            }
         }
 
         container.loadPersistentStores { _, error in
@@ -280,5 +325,49 @@ final class PersistenceController {
             }
         }
         container.viewContext.automaticallyMergesChangesFromParent = true
+    }
+
+    /// Upgrades an on-disk store written by an earlier schema to the current one.
+    ///
+    /// Lightweight (inferred) mapping is enough while changes stay additive. The
+    /// migration writes to a side file and only replaces the original once it succeeds,
+    /// so a failure leaves the user's data as it was.
+    static func migrateIfNeeded(storeAt url: URL) throws {
+        guard FileManager.default.fileExists(atPath: url.path) else { return }
+
+        let metadata = try NSPersistentStoreCoordinator.metadataForPersistentStore(
+            type: .sqlite, at: url
+        )
+        let current = HearthModel.shared
+        if current.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata) { return }
+
+        guard let source = HearthModel.history.last(where: {
+            $0.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata)
+        }) else { return }
+
+        let mapping = try NSMappingModel.inferredMappingModel(
+            forSourceModel: source, destinationModel: current
+        )
+        let staging = url.deletingLastPathComponent()
+            .appendingPathComponent("Hearth-migrating.sqlite")
+        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: current)
+        removeStoreFiles(at: staging)
+
+        let manager = NSMigrationManager(sourceModel: source, destinationModel: current)
+        try manager.migrateStore(
+            from: url, type: .sqlite, mapping: mapping, to: staging, type: .sqlite
+        )
+        try coordinator.replacePersistentStore(
+            at: url, withPersistentStoreFrom: staging, type: .sqlite
+        )
+        removeStoreFiles(at: staging)
+    }
+
+    /// Deletes a SQLite store and its sidecars. `destroyPersistentStore` leaves an
+    /// empty database file behind, which would block the next migration attempt.
+    private static func removeStoreFiles(at url: URL) {
+        for suffix in ["", "-wal", "-shm"] {
+            try? FileManager.default.removeItem(at: URL(fileURLWithPath: url.path + suffix))
+        }
     }
 }

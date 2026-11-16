@@ -129,6 +129,20 @@ struct PersonDetailView: View {
                 LabeledContent("Birthday", value: birthday.formatted(.dateTime.month(.wide).day()))
             }
 
+            if let work = workSummary(person) {
+                LabeledContent("Work", value: work)
+            }
+
+            if let connected = person.connectedOn {
+                LabeledContent("Connected", value: connected.formatted(.dateTime.month(.abbreviated).year()))
+            }
+
+            if let link = person.linkedInURL.flatMap(URL.init(string:)) {
+                Link(destination: link) {
+                    Label("LinkedIn profile", systemImage: "arrow.up.right.square")
+                }
+            }
+
             let photos = store.photoCount(for: person)
             if photos > 0 {
                 LabeledContent("Photos", value: "\(photos)")
@@ -151,6 +165,15 @@ struct PersonDetailView: View {
                     .foregroundStyle(.secondary)
                     .font(.callout)
             }
+        }
+    }
+
+    private func workSummary(_ person: CDPerson) -> String? {
+        switch (person.jobTitle, person.organization) {
+        case let (title?, org?): "\(title) at \(org)"
+        case let (title?, nil): title
+        case let (nil, org?): org
+        case (nil, nil): nil
         }
     }
 

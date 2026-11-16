@@ -80,6 +80,39 @@ final class PersonStore: ObservableObject {
         return person
     }
 
+    /// Adds the chosen LinkedIn connections, returning how many were new to Hearth.
+    ///
+    /// Goes through `findOrCreatePerson`, so someone already added from Contacts or a
+    /// face group is enriched rather than duplicated — and keeps the tier the user gave
+    /// them. Work details only fill gaps: a job title typed in Hearth beats a stale one
+    /// from LinkedIn.
+    @discardableResult
+    func importLinkedInConnections(
+        _ connections: [LinkedInConnection],
+        tier: RelationshipTier
+    ) -> Int {
+        var added = 0
+        for connection in connections {
+            let isNew = person(named: connection.fullName) == nil
+            guard let person = findOrCreatePerson(named: connection.fullName, tier: tier)
+            else { continue }
+            if isNew { added += 1 }
+
+            if person.organization == nil { person.organization = connection.company }
+            if person.jobTitle == nil { person.jobTitle = connection.position }
+            if person.linkedInURL == nil { person.linkedInURL = connection.profileURL?.absoluteString }
+            if person.connectedOn == nil { person.connectedOn = connection.connectedOn }
+            person.updatedAt = Date()
+        }
+        save()
+        return added
+    }
+
+    /// Lowercased names of everyone already in Hearth, for marking duplicates in pickers.
+    func existingNames() -> Set<String> {
+        Set(allPeople().compactMap { $0.displayName?.lowercased() })
+    }
+
     /// Attaches face groups to a person, one `CDFaceGroup` per cluster.
     ///
     /// Several groups per person is the expected case, not a conflict — a face that

@@ -41,6 +41,21 @@ struct AddPersonView: View {
                 }
 
                 Section {
+                    NavigationLink {
+                        LinkedInImportView {
+                            onAdded()
+                            dismiss()
+                        }
+                    } label: {
+                        Label("Import LinkedIn connections", systemImage: "square.and.arrow.down")
+                    }
+                } header: {
+                    Text("From LinkedIn")
+                } footer: {
+                    Text("Uses LinkedIn's data export, and suggests people you've worked with or been recommended by. You pick who to add.")
+                }
+
+                Section {
                     TextField("Name", text: $manualName)
                         .textContentType(.name)
                         .autocorrectionDisabled()
