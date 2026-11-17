@@ -13,6 +13,8 @@ struct HearthApp: App {
 }
 
 struct RootView: View {
+    @State private var incomingSpark: IncomingSpark?
+
     var body: some View {
         TabView {
             NavigationStack {
@@ -30,5 +32,12 @@ struct RootView: View {
             }
             .tabItem { Label("Photos", systemImage: "photo.on.rectangle") }
         }
+        // A Hearth Spark file AirDropped from the user's Mac, or opened from Files.
+        .onOpenURL { url in
+            if url.pathExtension.lowercased() == "hearthspark" {
+                incomingSpark = IncomingSpark(url: url)
+            }
+        }
+        .sheet(item: $incomingSpark) { SparkImportView(url: $0.url) }
     }
 }

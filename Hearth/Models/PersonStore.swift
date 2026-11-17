@@ -108,6 +108,47 @@ final class PersonStore: ObservableObject {
         return added
     }
 
+    /// Adds people from a reviewed Hearth Spark file. Returns how many were new.
+    ///
+    /// Saves only what Hearth already keeps per person: name, closeness, and the
+    /// contact link if one was found. The month of last contact becomes one
+    /// low-confidence interaction, and only if Hearth has nothing as recent. The file's
+    /// reasons and match codes are not stored. People already in Hearth keep the
+    /// closeness the user gave them here.
+    @discardableResult
+    func importSpark(
+        _ people: [(person: SparkPerson, contactIdentifier: String?)],
+        calendar: Calendar = .current
+    ) -> Int {
+        var added = 0
+        for (sparkPerson, contactIdentifier) in people {
+            let isNew = person(named: sparkPerson.name) == nil
+                && (contactIdentifier.map { person(withContactIdentifier: $0) == nil } ?? true)
+            let existing = contactIdentifier.flatMap(person(withContactIdentifier:))
+            guard let person = existing ?? findOrCreatePerson(
+                named: sparkPerson.name,
+                tier: RelationshipTier(sparkPerson.suggestedTier),
+                contactIdentifier: contactIdentifier
+            ) else { continue }
+            if isNew { added += 1 }
+
+            if let month = sparkPerson.lastContactMonth,
+               let date = Self.middle(ofMonth: month, calendar: calendar),
+               (lastInteraction(for: person) ?? .distantPast) < date {
+                recordInteraction(with: person, kind: .summary, source: .sparkImport, date: date)
+            }
+        }
+        save()
+        return added
+    }
+
+    /// "2026-10" → 15 October 2026. The middle of the month is the least-wrong guess.
+    nonisolated static func middle(ofMonth month: String, calendar: Calendar = .current) -> Date? {
+        let parts = month.split(separator: "-").compactMap { Int($0) }
+        guard parts.count == 2, (1...12).contains(parts[1]) else { return nil }
+        return calendar.date(from: DateComponents(year: parts[0], month: parts[1], day: 15))
+    }
+
     /// Lowercased names of everyone already in Hearth, for marking duplicates in pickers.
     func existingNames() -> Set<String> {
         Set(allPeople().compactMap { $0.displayName?.lowercased() })
@@ -380,6 +421,8 @@ enum InteractionKind: Int16, Sendable {
     case inPerson = 3
     case calendarEvent = 4
     case manual = 5
+    /// "In touch around this month", from a Hearth Spark summary. Kind unknown.
+    case summary = 6
 }
 
 enum InteractionSource: Int16, Sendable {
@@ -387,6 +430,9 @@ enum InteractionSource: Int16, Sendable {
     case calendar = 1
     case photoInference = 2
     case launchpadAction = 3
+    /// The month of last contact from Hearth Spark on the user's Mac. A month, not a
+    /// moment, and counted from data Hearth never saw — so trusted least.
+    case sparkImport = 4
 
     /// How much this source is trusted.
     ///
@@ -398,6 +444,7 @@ enum InteractionSource: Int16, Sendable {
         case .userLogged: 1.0
         case .calendar: 0.9
         case .launchpadAction: 0.6
+        case .sparkImport: 0.4
         case .photoInference: 0.5
         }
     }

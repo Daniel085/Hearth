@@ -47,6 +47,9 @@ struct PeopleListView: View {
             AddPersonView { reload() }
         }
         .onAppear(perform: reload)
+        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave)) { _ in
+            reload()
+        }
     }
 
     private func reload() {

@@ -65,6 +65,7 @@ Hearth embodies the ethos of a 1950s personal assistant:
 - [Why we can't use the Photos People album](./docs/people-album-access.md)
 - [Vision FeaturePrint vs. a Core ML face model](./docs/core-ml-comparison.md) — accuracy, licensing, and legal exposure
 - [Running the validation scan](./docs/running-the-scan.md)
+- [Backlog](./docs/backlog.md) — ideas not yet scheduled, such as family birthdays and due dates
 
 ## Roadmap
 

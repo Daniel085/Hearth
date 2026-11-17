@@ -57,6 +57,10 @@ struct LaunchpadView: View {
             Text(model.actionError ?? "")
         }
         .onAppear { model.refresh() }
+        // Imports (Hearth Spark, LinkedIn) save while this screen stays visible.
+        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave)) { _ in
+            model.refresh()
+        }
         .task { await model.requestCalendarIfNeeded() }
     }
 

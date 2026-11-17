@@ -94,3 +94,7 @@ iOSInjectionProject/
 
 # Swift Package Manager build artifacts
 prototypes/*/.build/
+
+# Hearth Spark output: personal data, never commit
+*.hearthspark
+mac/*/.build/

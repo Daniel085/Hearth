@@ -27,6 +27,10 @@
 		A1C0FFEE00000000000000A1 /* LinkedInConnections.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C0FFEE00000000000000B1 /* LinkedInConnections.swift */; };
 		A1C0FFEE00000000000000A2 /* LinkedInImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C0FFEE00000000000000B2 /* LinkedInImportView.swift */; };
 		A1C0FFEE00000000000000A3 /* LinkedInSignals.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C0FFEE00000000000000B3 /* LinkedInSignals.swift */; };
+		A1C0FFEE00000000000000A4 /* SparkFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C0FFEE00000000000000B4 /* SparkFile.swift */; };
+		A1C0FFEE00000000000000A5 /* Handles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C0FFEE00000000000000B5 /* Handles.swift */; };
+		A1C0FFEE00000000000000A6 /* SparkImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C0FFEE00000000000000B6 /* SparkImport.swift */; };
+		A1C0FFEE00000000000000A7 /* SparkImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C0FFEE00000000000000B7 /* SparkImportView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +56,10 @@
 		A1C0FFEE00000000000000B1 /* LinkedInConnections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LinkedInConnections.swift; path = Hearth/Import/LinkedInConnections.swift; sourceTree = "<group>"; };
 		A1C0FFEE00000000000000B2 /* LinkedInImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LinkedInImportView.swift; path = Hearth/Views/LinkedInImportView.swift; sourceTree = "<group>"; };
 		A1C0FFEE00000000000000B3 /* LinkedInSignals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LinkedInSignals.swift; path = Hearth/Import/LinkedInSignals.swift; sourceTree = "<group>"; };
+		A1C0FFEE00000000000000B4 /* SparkFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SparkFile.swift; path = mac/HearthSpark/Sources/HearthSparkCore/SparkFile.swift; sourceTree = "<group>"; };
+		A1C0FFEE00000000000000B5 /* Handles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Handles.swift; path = mac/HearthSpark/Sources/HearthSparkCore/Handles.swift; sourceTree = "<group>"; };
+		A1C0FFEE00000000000000B6 /* SparkImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SparkImport.swift; path = Hearth/Import/SparkImport.swift; sourceTree = "<group>"; };
+		A1C0FFEE00000000000000B7 /* SparkImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SparkImportView.swift; path = Hearth/Views/SparkImportView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +100,10 @@
 				A1C0FFEE00000000000000B2 /* LinkedInImportView.swift */,
 				A1C0FFEE00000000000000B1 /* LinkedInConnections.swift */,
 				A1C0FFEE00000000000000B3 /* LinkedInSignals.swift */,
+				A1C0FFEE00000000000000B7 /* SparkImportView.swift */,
+				A1C0FFEE00000000000000B6 /* SparkImport.swift */,
+				A1C0FFEE00000000000000B5 /* Handles.swift */,
+				A1C0FFEE00000000000000B4 /* SparkFile.swift */,
 				83FCCADCACBEC8F8AFE2CAF8 /* RelationshipScoring.swift */,
 				B714AE17F5D767B2D922EC4C /* Info.plist */,
 			);
@@ -200,6 +212,10 @@
 				A1C0FFEE00000000000000A2 /* LinkedInImportView.swift in Sources */,
 				A1C0FFEE00000000000000A1 /* LinkedInConnections.swift in Sources */,
 				A1C0FFEE00000000000000A3 /* LinkedInSignals.swift in Sources */,
+				A1C0FFEE00000000000000A7 /* SparkImportView.swift in Sources */,
+				A1C0FFEE00000000000000A6 /* SparkImport.swift in Sources */,
+				A1C0FFEE00000000000000A5 /* Handles.swift in Sources */,
+				A1C0FFEE00000000000000A4 /* SparkFile.swift in Sources */,
 				EED10153EC185F6BEECCADB5 /* RelationshipScoring.swift in Sources */,
 				C4D128CC5443CEB6F12670B3 /* FaceDescriptor.swift in Sources */,
 				B729F083DBC7FB9BFD71DA35 /* FaceClusterer.swift in Sources */,

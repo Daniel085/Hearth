@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleName</key>
+	<string>Hearth Spark</string>
+	<key>CFBundleDisplayName</key>
+	<string>Hearth Spark</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.danielororke.HearthSpark</string>
+	<key>CFBundleExecutable</key>
+	<string>HearthSparkApp</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.1</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>15.0</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.productivity</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Hearth Spark matches the people you message, call and email to your contacts, so it can suggest who you're close to. It reads names, numbers and emails, and whether a birthday or relation is filled in. Everything stays on this Mac.</string>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.danielororke.hearthspark</string>
+			<key>UTTypeDescription</key>
+			<string>Hearth Spark</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.json</string>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>hearthspark</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

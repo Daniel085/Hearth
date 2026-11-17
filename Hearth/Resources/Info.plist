@@ -28,6 +28,43 @@
 	<string>Hearth reads your calendar to remind you about time with the people who matter — like an upcoming dinner or catch-up. This is optional, and your events stay on your device.</string>
 	<key>NSCalendarsFullAccessUsageDescription</key>
 	<string>Hearth reads your calendar to remind you about time with the people who matter — like an upcoming dinner or catch-up. This is optional, and your events stay on your device.</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Hearth Spark</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.danielororke.hearthspark</string>
+			</array>
+		</dict>
+	</array>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.danielororke.hearthspark</string>
+			<key>UTTypeDescription</key>
+			<string>Hearth Spark</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.json</string>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>hearthspark</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+	<!-- Spark files are copied into Hearth's inbox, read once, then deleted. -->
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<false/>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UISupportedInterfaceOrientations</key>

@@ -348,6 +348,7 @@ extension InteractionKind {
         case .inPerson: "In person"
         case .calendarEvent: "Event"
         case .manual: "Noted"
+        case .summary: "In touch (from your Mac)"
         }
     }
 
@@ -359,6 +360,7 @@ extension InteractionKind {
         case .inPerson: "person.2"
         case .calendarEvent: "calendar"
         case .manual: "pencil"
+        case .summary: "laptopcomputer"
         }
     }
 }

@@ -29,6 +29,16 @@ enum RelationshipTier: Int16, CaseIterable, Sendable {
         }
     }
 
+    /// From a Hearth Spark file's tier, which uses the same names.
+    init(_ tier: SparkTier) {
+        switch tier {
+        case .innerCircle: self = .innerCircle
+        case .close: self = .close
+        case .keptWarm: self = .keptWarm
+        case .distant: self = .distant
+        }
+    }
+
     var label: String {
         switch self {
         case .innerCircle: "Inner circle"
