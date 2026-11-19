@@ -29,9 +29,14 @@ struct LinkedInSignals: Sendable {
 }
 
 /// Why a connection is suggested, strongest reason first.
-struct LinkedInSuggestion: Sendable, Equatable {
-    let score: Double
-    let reasons: [String]
+public struct LinkedInSuggestion: Sendable, Equatable {
+    public let score: Double
+    public let reasons: [String]
+
+    public init(score: Double, reasons: [String]) {
+        self.score = score
+        self.reasons = reasons
+    }
 }
 
 extension LinkedInSignals {

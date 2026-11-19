@@ -1,6 +1,7 @@
 # Hearth Spark
 
-Suggests who you're close to from Messages, call history, Apple Mail and Contacts on your Mac, and
+Suggests who you're close to from Messages, call history, Apple Mail, Contacts and
+(optionally) your LinkedIn data export on your Mac, and
 writes a small file for Hearth on your iPhone. Everything runs locally. See
 [docs/hearth-spark-privacy.md](../../docs/hearth-spark-privacy.md) for exactly what it
 reads, sends and keeps.
@@ -19,7 +20,8 @@ The app has its own permissions, so Full Disk Access goes to *Hearth Spark* rath
 to your whole terminal. It walks through:
 
 1. **What to read, and permissions.** Switch Messages, Call history or Mail off if you'd
-   rather they weren't read; a source that's off is never opened. It asks for Contacts. For Full Disk Access, open Settings, add Hearth
+   rather they weren't read; a source that's off is never opened. Switch LinkedIn on
+   and choose your unzipped LinkedIn export to add work relationships. It asks for Contacts. For Full Disk Access, open Settings, add Hearth
    Spark with the + button, and reopen the app. Full Disk Access is optional: without it,
    suggestions come from Contacts alone.
 2. **Find My People.** Counts who you message and call, on this Mac.
@@ -65,11 +67,15 @@ swift run -q hearth-spark --no-mail
 ```
 
 ```bash
+swift run -q hearth-spark --linkedin ~/Documents/LinkedInExport
+```
+
+```bash
 swift run -q hearth-spark --write ~/Desktop/me.hearthspark
 ```
 
 With no options it shows the review and writes nothing. `--summary` prints counts only,
-with no names. `--no-messages`, `--no-calls` and `--no-mail` leave a source out, unopened. `--show-json` prints the file's exact contents. `--write` saves the file,
+with no names. `--no-messages`, `--no-calls` and `--no-mail` leave a source out, unopened. `--linkedin` adds an unzipped LinkedIn export. `--show-json` prints the file's exact contents. `--write` saves the file,
 then tells you it's the only thing it kept.
 
 ## Test

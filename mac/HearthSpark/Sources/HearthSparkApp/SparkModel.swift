@@ -27,7 +27,9 @@ final class SparkModel: NSObject, ObservableObject {
     @Published var tierOverrides: [Int: SparkTier] = [:]
     /// Sources the user has switched on. All, to start; held for this session only,
     /// like everything else.
-    @Published var enabledSources = Set(SparkSource.allCases)
+    @Published var enabledSources = Set(SparkSource.handleSources)
+    /// The unzipped LinkedIn export the user chose. LinkedIn stays off until there is one.
+    @Published var linkedInFolder: URL?
     @Published var errorMessage: String?
     @Published var keptMessage = ""
     @Published var sendOutcome: SendOutcome?
@@ -47,7 +49,22 @@ final class SparkModel: NSObject, ObservableObject {
     }
 
     /// Full Disk Access is only needed for the optional sources.
-    var needsFullDiskAccess: Bool { !enabledSources.isEmpty }
+    /// (LinkedIn is a folder the user picks, which needs no special permission.)
+    var needsFullDiskAccess: Bool { !enabledSources.isDisjoint(with: SparkSource.handleSources) }
+
+    /// Asks for the LinkedIn export folder. Returns false if the user cancels.
+    @discardableResult
+    func chooseLinkedInFolder() -> Bool {
+        let panel = NSOpenPanel()
+        panel.canChooseDirectories = true
+        panel.canChooseFiles = false
+        panel.allowsMultipleSelection = false
+        panel.prompt = "Use This Folder"
+        panel.message = "Choose your unzipped LinkedIn data export — the folder that contains Connections.csv."
+        guard panel.runModal() == .OK, let url = panel.url else { return false }
+        linkedInFolder = url
+        return true
+    }
 
     // macOS has no "limited" Contacts access; it's all or nothing.
     var contactsGranted: Bool { contactsStatus == .authorized }
@@ -75,9 +92,10 @@ final class SparkModel: NSObject, ObservableObject {
         stage = .scanning
         errorMessage = nil
         let sources = enabledSources
+        let linkedInFolder = linkedInFolder
         Task.detached(priority: .userInitiated) {
             do {
-                let scan = try SparkScan.run(sources: sources)
+                let scan = try SparkScan.run(sources: sources, linkedInFolder: linkedInFolder)
                 await MainActor.run {
                     self.scan = scan
                     self.included = Set(scan.result.file.people.indices)

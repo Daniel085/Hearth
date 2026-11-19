@@ -7,8 +7,8 @@ and the import in the Hearth iOS app.
 
 This is the wording on the app's welcome screen:
 
-> Hearth Spark looks at your contacts, messages, calls and email on this Mac to recommend
-> the people to keep close in Hearth.
+> Hearth Spark looks at your contacts, messages, calls and email on this Mac — and your
+> LinkedIn export, if you add it — to recommend the people to keep close in Hearth.
 >
 > - **Stays on your Mac.** Everything is processed here. Nothing is ever sent to a
 >   server — Hearth Spark doesn't use the internet at all.
@@ -32,7 +32,9 @@ research summary in the conversation that led here, and
 ## What is read
 
 Contacts is always read. Messages, Call history and Mail each have an on/off switch on
-the first screen (`--no-messages`, `--no-calls`, `--no-mail` on the command line). A
+the first screen (`--no-messages`, `--no-calls`, `--no-mail` on the command line).
+LinkedIn is off until you switch it on and choose your unzipped LinkedIn data export
+(`--linkedin FOLDER`); Hearth Spark never signs in to LinkedIn. A
 source that's switched off is never opened, and a test checks that its reader is never
 called. With all three off, Full Disk Access isn't needed at all.
 
@@ -41,6 +43,13 @@ read, and fetching it would need the network, which Hearth Spark never uses. Mai
 only email addressed to five people or fewer, so mailing lists and newsletters don't
 count, and it skips Sent-to-self, Junk and Trash.
 
+LinkedIn only adds to people already in your Contacts. A connection is matched to a
+contact by email when the export includes one, otherwise by name, and only when exactly
+one contact has that name. Connections who aren't in your Contacts are left out; the
+iPhone app's own LinkedIn import covers them. LinkedIn's contribution to anyone's score
+is capped, so working together can lift someone but never outrank people you actually
+talk to. Its reasons appear in the review prefixed "LinkedIn:".
+
 Your own contact card is skipped, so you're never recommended to yourself.
 
 | Source | Exactly what | Never |
@@ -48,6 +57,7 @@ Your own contact card is skipped, so you're never recommended to yourself.
 | Messages (`~/Library/Messages/chat.db`) | `message.date`, `message.is_from_me`, `message.associated_message_type`, `handle.id`, and the two join tables linking them to chats | Message text, rich text (`attributedBody`), subjects, attachments, group names |
 | Call history (`CallHistory.storedata`) | `ZADDRESS`, `ZDATE`, `ZDURATION`, `ZANSWERED` | Names stored with calls, locations, anything else |
 | Mail (`~/Library/Mail/V*/MailData/Envelope Index`) | `messages.sender`, `messages.mailbox`, `messages.date_sent`, `messages.date_received`, `addresses.address`, `recipients.message`, `recipients.address`, `mailboxes.url` | Email bodies (separate files, never opened), subjects, summaries, attachments |
+| LinkedIn export (a folder you choose) | Connections (names, profile links, company, connected date, email if shared, used only to match); who endorsed or recommended whom; *whether* an invitation had a note; your own job history | Recommendation text, invitation notes, and every other file in the export |
 | Contacts | Name, phone numbers, emails; whether a birthday, address or nickname is *filled in*; relation labels on your own card ("mother") | Birthday and address values, notes, photos, job details, social profiles |
 
 The column lists are constants in the code (`MessagesSource.columnsRead`,

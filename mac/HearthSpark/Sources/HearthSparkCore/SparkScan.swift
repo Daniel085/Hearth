@@ -3,13 +3,18 @@ import Foundation
 /// The optional sources the user can switch on or off. Contacts isn't one of them:
 /// without it every number is a stranger and nothing can be suggested.
 public enum SparkSource: String, CaseIterable, Hashable, Sendable {
-    case messages, calls, mail
+    case messages, calls, mail, linkedIn
+
+    /// Sources counted per phone number or email. LinkedIn is matched to contact cards
+    /// instead, so it's read separately.
+    public static let handleSources: [SparkSource] = [.messages, .calls, .mail]
 
     public var name: String {
         switch self {
         case .messages: "Messages"
         case .calls: "Call history"
         case .mail: "Mail"
+        case .linkedIn: "LinkedIn"
         }
     }
 
@@ -19,6 +24,7 @@ public enum SparkSource: String, CaseIterable, Hashable, Sendable {
         case .messages: "Who you text and iMessage one-to-one, and when."
         case .calls: "Who you call and FaceTime, when, and for how long."
         case .mail: "Who you email in Apple Mail, and when. Small emails only — no lists or newsletters."
+        case .linkedIn: "Recommendations, endorsements and shared employers, from your LinkedIn data export. Adds to people already in your Contacts."
         }
     }
 
@@ -27,6 +33,7 @@ public enum SparkSource: String, CaseIterable, Hashable, Sendable {
         case .messages: try MessagesSource.read(now: now)
         case .calls: try CallsSource.read(now: now)
         case .mail: try MailSource.read(now: now)
+        case .linkedIn: [:]   // read per contact card in `run`, not per handle
         }
     }
 }
@@ -43,17 +50,45 @@ public struct SparkScan {
 
     /// Throws only if Contacts can't be read. A source that's switched off is never
     /// opened; one that can't be read is skipped. Both are noted in `reports`.
-    public static func run(sources enabled: Set<SparkSource> = Set(SparkSource.allCases), now: Date = Date()) throws -> SparkScan {
+    public static func run(
+        sources enabled: Set<SparkSource> = Set(SparkSource.handleSources),
+        linkedInFolder: URL? = nil,
+        now: Date = Date()
+    ) throws -> SparkScan {
         let cards = try ContactsSource.read()
-        let (interactions, sourceReports) = gather(enabled) { try $0.read(now: now) }
+        var (interactions, sourceReports) = gather(enabled) { try $0.read(now: now) }
+        let (linkedIn, linkedInReport) = readLinkedIn(enabled.contains(.linkedIn) ? linkedInFolder : nil,
+                                                      enabled: enabled.contains(.linkedIn), cards: cards, now: now)
+        sourceReports.append(linkedInReport)
         return SparkScan(
             cardCount: cards.count,
             interactionHandles: interactions.count,
             reports: [
                 .init(name: "Contacts", detail: "\(cards.count) cards — names, numbers, emails, and whether a birthday, address, nickname or relation is filled in. Your own card is skipped."),
             ] + sourceReports,
-            result: Recommender(now: now).build(cards: cards, interactions: interactions)
+            result: Recommender(now: now).build(cards: cards, interactions: interactions, linkedIn: linkedIn)
         )
+    }
+
+    static func readLinkedIn(
+        _ folder: URL?, enabled: Bool, cards: [ContactCard], now: Date
+    ) -> ([Int: LinkedInSuggestion], Review.SourceReport) {
+        let name = SparkSource.linkedIn.name
+        guard enabled else {
+            return ([:], .init(name: name, detail: "Switched off, so it was never opened.", skipped: true))
+        }
+        guard let folder else {
+            return ([:], .init(name: name, detail: "No export folder chosen.", skipped: true))
+        }
+        do {
+            let result = try LinkedInSource.read(folder: folder, cards: cards, now: now)
+            return (result.byCard, .init(
+                name: name,
+                detail: "\(result.connectionCount) connections; \(result.byCard.count) of your contacts have recommendations, endorsements or shared employers"
+            ))
+        } catch {
+            return ([:], .init(name: name, detail: error.localizedDescription, skipped: true))
+        }
     }
 
     /// Reads each enabled source and merges the counts. `read` is never called for a
@@ -64,7 +99,7 @@ public struct SparkScan {
     ) -> ([String: HandleStats], [Review.SourceReport]) {
         var interactions: [String: HandleStats] = [:]
         var reports: [Review.SourceReport] = []
-        for source in SparkSource.allCases {
+        for source in SparkSource.handleSources {
             guard enabled.contains(source) else {
                 reports.append(.init(name: source.name, detail: "Switched off, so it was never opened.", skipped: true))
                 continue

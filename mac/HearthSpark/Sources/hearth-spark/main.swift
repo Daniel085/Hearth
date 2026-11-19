@@ -9,6 +9,7 @@ import HearthSparkCore
 //   hearth-spark --write FILE       write the Spark file after showing the review
 //   hearth-spark --show-json        also print the file's exact contents
 //   hearth-spark --no-messages --no-calls --no-mail
+//   hearth-spark --linkedin FOLDER  also use an unzipped LinkedIn data export
 //                                   leave a source out; it is never opened
 //
 // Everything runs on this Mac. Nothing is sent anywhere by this tool.
@@ -21,11 +22,15 @@ func value(after flag: String) -> String? {
 let summaryOnly = args.contains("--summary")
 let showJSON = args.contains("--show-json")
 let writePath = value(after: "--write")
-let sources = Set(SparkSource.allCases.filter { !args.contains("--no-\($0.rawValue)") })
+let linkedInFolder = value(after: "--linkedin").map {
+    URL(fileURLWithPath: ($0 as NSString).expandingTildeInPath, isDirectory: true)
+}
+var sources = Set(SparkSource.handleSources.filter { !args.contains("--no-\($0.rawValue)") })
+if linkedInFolder != nil { sources.insert(.linkedIn) }
 
 if args.contains("--help") || args.contains("-h") {
     print("""
-    usage: hearth-spark [--summary] [--show-json] [--no-messages] [--no-calls] [--no-mail] [--write FILE]
+    usage: hearth-spark [--summary] [--show-json] [--no-messages] [--no-calls] [--no-mail] [--linkedin FOLDER] [--write FILE]
 
     Reads who you message and call (never what), plus your Contacts, on this Mac.
     Shows who it would suggest to Hearth and why. Writes a file only with --write.
@@ -38,7 +43,7 @@ func stderr(_ s: String) { FileHandle.standardError.write(Data((s + "\n").utf8))
 
 let scan: SparkScan
 do {
-    scan = try SparkScan.run(sources: sources)
+    scan = try SparkScan.run(sources: sources, linkedInFolder: linkedInFolder)
 } catch {
     stderr(error.localizedDescription)
     exit(1)

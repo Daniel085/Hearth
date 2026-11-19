@@ -87,6 +87,9 @@ public enum Review {
     private static func kind(of reason: String) -> String {
         if reason.hasPrefix("Messaged") { return "Messaged both ways" }
         if reason.hasPrefix("Emailed") { return "Emailed both ways" }
+        if reason.hasPrefix("LinkedIn: Colleague") { return "LinkedIn: colleague" }
+        if reason.hasPrefix("LinkedIn: Works at") { return "LinkedIn: works at your employer" }
+        if reason.hasPrefix("LinkedIn: Endorsed you") { return "LinkedIn: endorsed you" }
         if reason.contains("call") { return "Calls" }
         if reason.hasPrefix("In touch since") { return "In touch 5+ years" }
         if reason.hasPrefix("Your card lists") { return "Relation on your card" }

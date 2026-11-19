@@ -347,3 +347,92 @@ func anUnreadableSourceIsSkippedNotFatal() {
     let mail = reports.first { $0.name == "Mail" }
     #expect(mail?.detail == "Apple Mail isn't set up on this Mac.")
 }
+
+// MARK: - LinkedIn
+
+private func connection(_ first: String, _ last: String, email: String? = nil, company: String? = nil) -> LinkedInConnection {
+    LinkedInConnection(
+        firstName: first, lastName: last, email: email, company: company, position: nil,
+        profileURL: URL(string: "https://www.linkedin.com/in/\(first.lowercased())-\(last.lowercased())"),
+        connectedOn: nil
+    )
+}
+
+private let recommended = LinkedInSignals.parse(recommendationsReceived: """
+    First Name,Last Name,Company,Job Title,Text,Creation Date,Status
+    Jane,Doe,Acme,CTO,"Great",01/01/25,VISIBLE
+    Sam,Lee,Acme,PM,"Great",01/01/25,VISIBLE
+    Pat,Lee,Acme,PM,"Great",01/01/25,VISIBLE
+    Robin,Ray,Acme,PM,"Great",01/01/25,VISIBLE
+    """)
+
+@Test
+func linkedInMatchesByEmailThenUniqueNameOnly() {
+    let cards = [
+        ContactCard(name: "Jane Doe", handles: ["jane@example.com"]),
+        ContactCard(name: "Sam Lee", handles: ["4155550100"]),
+        ContactCard(name: "Pat Lee", handles: ["4155550101"]),
+        ContactCard(name: "Pat Lee", handles: ["4155550102"]),   // two Pat Lees
+        ContactCard(name: "Someone Else", handles: ["robin.work@example.com"]),
+    ]
+    let matched = LinkedInSource.match([
+        connection("Jane", "Doe"),                                       // by unique name
+        connection("Sam", "Lee"),                                        // by unique name
+        connection("Pat", "Lee"),                                        // ambiguous: skipped
+        connection("Robin", "Ray", email: "Robin.Work@example.com"),     // by email, despite the name
+        connection("Not", "Saved"),                                      // not in Contacts
+    ], signals: recommended, cards: cards, now: now)
+
+    #expect(Set(matched.keys) == [0, 1, 4])
+    #expect(matched[0]?.reasons == ["Recommended you"])
+}
+
+@Test
+func linkedInLiftsButCannotOutrankRealConversation() {
+    let heavy = LinkedInSuggestion(score: 20, reasons: ["Recommended you", "Colleague at Acme", "Endorsed you 5×"])
+    let onlyLinkedIn = Recommender(now: now).score(card: acquaintance, stats: HandleStats(), linkedIn: heavy)
+    #expect(onlyLinkedIn.score == Recommender.linkedInCap)
+    #expect(onlyLinkedIn.reasons == ["LinkedIn: Recommended you", "LinkedIn: Colleague at Acme", "LinkedIn: Endorsed you 5×"])
+
+    let talks = Recommender(now: now).score(card: acquaintance, stats: janeStats())
+    #expect(talks.score > onlyLinkedIn.score)
+}
+
+@Test
+func linkedInSwitchedOffOrMissingFolderIsReportedNotRead() {
+    let off = SparkScan.readLinkedIn(URL(fileURLWithPath: "/nonexistent"), enabled: false, cards: [], now: now)
+    #expect(off.0.isEmpty)
+    #expect(off.1.detail == "Switched off, so it was never opened.")
+
+    let noFolder = SparkScan.readLinkedIn(nil, enabled: true, cards: [], now: now)
+    #expect(noFolder.1.skipped)
+    #expect(noFolder.1.detail == "No export folder chosen.")
+}
+
+@Test
+func linkedInReadsAnExportFolderEndToEnd() throws {
+    let folder = FileManager.default.temporaryDirectory.appendingPathComponent("li-\(UUID())", isDirectory: true)
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: folder) }
+    try """
+    Notes:
+    "Some preamble"
+
+    First Name,Last Name,URL,Email Address,Company,Position,Connected On
+    Jane,Doe,https://www.linkedin.com/in/jane-doe,,Acme,CTO,01 Feb 2024
+    Not,Saved,https://www.linkedin.com/in/not-saved,,Acme,PM,01 Feb 2024
+    """.write(to: folder.appendingPathComponent("Connections.csv"), atomically: true, encoding: .utf8)
+    try """
+    First Name,Last Name,Company,Job Title,Text,Creation Date,Status
+    Jane,Doe,Acme,CTO,"Great",01/01/25,VISIBLE
+    """.write(to: folder.appendingPathComponent("Recommendations_Received.csv"), atomically: true, encoding: .utf8)
+
+    let (byCard, report) = SparkScan.readLinkedIn(folder, enabled: true, cards: [jane], now: now)
+    #expect(!report.skipped)
+    #expect(report.detail.hasPrefix("2 connections; 1 of your contacts"))
+    #expect(byCard[0]?.reasons == ["Recommended you"])
+
+    // And it flows through to the file: Jane gains a LinkedIn reason.
+    let result = Recommender(now: now).build(cards: [jane], interactions: ["4155550100": janeStats()], linkedIn: byCard)
+    #expect(result.file.people.first?.reasons.contains("LinkedIn: Recommended you") == true)
+}

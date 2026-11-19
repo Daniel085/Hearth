@@ -22,7 +22,11 @@ public struct Recommender {
         public var reasons: [String]
     }
 
-    public func score(card: ContactCard, stats: HandleStats) -> Scored {
+    /// LinkedIn can add at most this much. It says who you worked with, not who you
+    /// talk to, so it can lift someone but never outrank a real conversation.
+    public static let linkedInCap = 6.0
+
+    public func score(card: ContactCard, stats: HandleStats, linkedIn: LinkedInSuggestion? = nil) -> Scored {
         var total = 0.0
         var reasons: [(Double, String)] = []
         func add(_ points: Double, _ reason: String?) {
@@ -65,6 +69,13 @@ public struct Recommender {
             add(2, "In touch since \(Calendar.current.component(.year, from: first))")
         }
 
+        if let linkedIn, linkedIn.score > 0, !linkedIn.reasons.isEmpty {
+            // Share the capped total across LinkedIn's own reasons, which arrive
+            // strongest first, so they sort sensibly among the others.
+            let share = min(Self.linkedInCap, linkedIn.score) / Double(linkedIn.reasons.count)
+            for reason in linkedIn.reasons { add(share, "LinkedIn: \(reason)") }
+        }
+
         if let relation = card.relation { add(4, "Your card lists them as \(relation)") }
         if card.hasBirthday { add(2, "Birthday saved") }
         if card.hasNickname { add(1, "Nickname saved") }
@@ -97,7 +108,12 @@ public struct Recommender {
     ///
     /// Interactions with numbers not in Contacts are discarded here — strangers,
     /// businesses, two-factor codes. They are never scored, named or sent.
-    public func build(cards: [ContactCard], interactions: [String: HandleStats], salt: String = MatchKey.newSalt()) -> Result {
+    public func build(
+        cards: [ContactCard],
+        interactions: [String: HandleStats],
+        linkedIn: [Int: LinkedInSuggestion] = [:],
+        salt: String = MatchKey.newSalt()
+    ) -> Result {
         var owner: [String: Int] = [:]
         for (index, card) in cards.enumerated() {
             for handle in card.handles where owner[handle] == nil { owner[handle] = index }
@@ -105,10 +121,10 @@ public struct Recommender {
         let unmatched = interactions.keys.filter { owner[$0] == nil }.count
 
         var scored: [Scored] = []
-        for card in cards {
+        for (index, card) in cards.enumerated() {
             var stats = HandleStats()
             for handle in card.handles { if let s = interactions[handle] { stats.merge(s) } }
-            let result = score(card: card, stats: stats)
+            let result = score(card: card, stats: stats, linkedIn: linkedIn[index])
             if result.score >= threshold { scored.append(result) }
         }
         scored.sort { $0.score > $1.score }

@@ -75,7 +75,7 @@ struct PermissionsView: View {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Hearth Spark").font(.largeTitle.bold())
-                    Text("Hearth Spark looks at your contacts, messages, calls and email on this Mac to recommend the people to keep close in Hearth.")
+                    Text("Hearth Spark looks at your contacts, messages, calls and email on this Mac — and your LinkedIn export, if you add it — to recommend the people to keep close in Hearth.")
                         .font(.title3)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -124,6 +124,16 @@ struct PermissionsView: View {
                         ForEach(SparkSource.allCases, id: \.self) { source in
                             Toggle(isOn: sourceBinding(source)) {
                                 SourceLabel(name: source.name, blurb: source.blurb)
+                            }
+                            if source == .linkedIn, let folder = model.linkedInFolder {
+                                HStack {
+                                    Label(folder.lastPathComponent, systemImage: "folder")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                    Button("Change…") { model.chooseLinkedInFolder() }
+                                        .controlSize(.small)
+                                }
+                                .padding(.leading, 4)
                             }
                         }
                     }
@@ -210,6 +220,8 @@ extension PermissionsView {
         Binding(
             get: { model.enabledSources.contains(source) },
             set: { on in
+                // Switching LinkedIn on needs the export folder; cancelling leaves it off.
+                if on, source == .linkedIn, model.linkedInFolder == nil, !model.chooseLinkedInFolder() { return }
                 if on { model.enabledSources.insert(source) } else { model.enabledSources.remove(source) }
             }
         )
@@ -217,7 +229,7 @@ extension PermissionsView {
 
     /// "Messages, call history and Mail", for whichever are switched on.
     private var enabledNames: String {
-        let names = SparkSource.allCases.filter(model.enabledSources.contains).map { $0 == .calls ? "call history" : $0.name }
+        let names = SparkSource.handleSources.filter(model.enabledSources.contains).map { $0 == .calls ? "call history" : $0.name }
         guard names.count > 1 else { return names.first ?? "" }
         return names.dropLast().joined(separator: ", ") + " and " + names.last!
     }
